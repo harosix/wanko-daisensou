@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>わんこ大戦争</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="script.js"></script>
+</head>
+
+<body>
+
+    <!-- =====================
+         タイトル画面
+    ====================== -->
+    <section id="titleScreen" class="menu-screen title-screen">
+        <div class="menu-card">
+            <p class="menu-subtitle">DOG BATTLE</p>
+            <h1>🐶 わんこ大戦争</h1>
+            <p class="menu-description">わんこたちと一緒に敵の砦を攻略しよう！</p>
+            <button id="startBtn" class="menu-btn" type="button">
+                ゲームスタート
+            </button>
+        </div>
+    </section>
+
+    <!-- =====================
+         ホーム画面
+    ====================== -->
+    <section id="homeScreen" class="home-screen" hidden>
+        <div class="home-container">
+
+            <header class="home-header">
+                <div class="home-top">
+                    <span class="home-logo">🐾 WANKO BATTLE</span>
+
+                    <div class="home-currency">
+                        <span class="home-coin">
+                            🪙 ゴールド：<span id="homeCoins">0</span>
+                        </span>
+
+                        <div class="home-ticket">
+                            🎟️ チケット：<span id="homeTickets">0</span> 枚
+                        </div>
+                    </div>
+                </div>
+
+                <div class="home-hero">
+                    <span class="home-hero-icon">🐶</span>
+                    <h1>わんこ大戦争</h1>
+                    <p>わんこ軍団、出撃準備！</p>
+                </div>
+            </header>
+
+            <main class="home-main">
+                <h2 class="home-heading">メニューを選ぼう！</h2>
+
+                <div class="home-menu">
+                    <button id="homeStageBtn" class="home-menu-btn stage-menu" type="button">
+                        <span class="home-menu-icon">⚔️</span>
+                        <strong>ステージ選択</strong>
+                        <small>冒険に出発！</small>
+                    </button>
+
+                    <button id="homePartyBtn" class="home-menu-btn party-menu" type="button">
+                        <span class="home-menu-icon">🐾</span>
+                        <strong>キャラ編成</strong>
+                        <small>パーティを編成してみよう！</small>
+                    </button>
+
+                    <button id="homeTrainingBtn" class="home-menu-btn training-menu" type="button">
+                        <span class="home-menu-icon">⭐</span>
+                        <strong>キャラ育成</strong>
+                        <small>手に入れたキャラを強化しよう！</small>
+                    </button>
+
+                    <button id="homeGachaBtn" class="home-menu-btn gacha-menu" type="button">
+                        <span class="home-menu-icon">🎁</span>
+                        <strong>ガチャ</strong>
+                        <small>新たな仲間を手に入れよう！</small>
+                    </button>
+                </div>
+
+                <div class="home-notice">
+                    <span>📢</span>
+                    <p>今日もわんこたちは元気いっぱい！</p>
+                </div>
+
+                <button id="homeBackBtn" class="home-back-btn" type="button">
+                    ← タイトルに戻る
+                </button>
+            </main>
+
+            <footer class="home-footer">
+                WANKO BATTLE
+            </footer>
+
+        </div>
+    </section>
+
+    <!-- =====================
+         キャラクター編成画面
+    ====================== -->
+    <section id="partyScreen" class="party-screen" hidden>
+        <div class="party-container">
+
+            <header class="party-header">
+                <p class="party-subtitle">WANKO BATTLE</p>
+                <h1>🐾 キャラクター編成</h1>
+                <p>出撃するわんこを最大5体まで選ぼう！</p>
+            </header>
+
+            <main class="party-main">
+
+                <!-- 現在の編成 -->
+                <section class="party-section">
+                    <div class="party-section-header">
+                        <h2>現在の編成</h2>
+                        <span class="party-count">
+                            <span id="partyCount">0</span> / 5
+                        </span>
+                    </div>
+
+                    <div id="partySlots" class="party-slots">
+                        <button class="party-slot" data-slot="0" type="button">
+                            <span class="party-slot-empty">＋</span>
+                            <small>枠1</small>
+                        </button>
+                        <button class="party-slot" data-slot="1" type="button">
+                            <span class="party-slot-empty">＋</span>
+                            <small>枠2</small>
+                        </button>
+                        <button class="party-slot" data-slot="2" type="button">
+                            <span class="party-slot-empty">＋</span>
+                            <small>枠3</small>
+                        </button>
+                        <button class="party-slot" data-slot="3" type="button">
+                            <span class="party-slot-empty">＋</span>
+                            <small>枠4</small>
+                        </button>
+                        <button class="party-slot" data-slot="4" type="button">
+                            <span class="party-slot-empty">＋</span>
+                            <small>枠5</small>
+                        </button>
+                    </div>
+
+                    <p class="party-help">
+                        所持キャラを選択して編成しよう！
+                        編成中のキャラを押すと外せるよ。
+                    </p>
+                </section>
+
+                <!-- 所持キャラクター -->
+                <section class="party-section">
+                    <div class="party-section-header">
+                        <h2>所持キャラクター</h2>
+                        <span class="party-owned-count">
+                            所持数：<span id="ownedCount">0</span>
+                        </span>
+                    </div>
+
+                    <div id="ownedCharacterList" class="owned-character-list"></div>
+                </section>
+
+                <p id="partyMessage" class="party-message"></p>
+
+                <div class="party-actions">
+                    <button id="partySaveBtn" class="party-save-btn" type="button">
+                        編成を保存
+                    </button>
+
+                    <button id="partyBackBtn" class="party-back-btn" type="button">
+                        ホームに戻る
+                    </button>
+                </div>
+
+            </main>
+        </div>
+    </section>
+
+    <!-- =====================
+         キャラクター育成画面
+    ====================== -->
+    <section id="trainingScreen" class="training-screen" hidden>
+        <div class="training-container">
+
+            <header class="training-header">
+                <p class="training-subtitle">WANKO BATTLE</p>
+                <h1>⭐ キャラクター育成</h1>
+                <p>お気に入りのわんこを強くしよう！</p>
+            </header>
+
+            <main class="training-main">
+
+                <div class="training-list-header">
+                    <h2>所持キャラクター</h2>
+                    <div class="training-coin-display">
+                        <span>所持コイン</span>
+                        <strong>🪙 <span id="trainingCoins">0</span></strong>
+                    </div>
+
+                    <div class="training-materials">
+                        <div class="material-item">
+                            <span>N石</span>
+                            <strong id="trainingMaterialN">0</strong>
+                        </div>
+                        <div class="material-item">
+                            <span>R石</span>
+                            <strong id="trainingMaterialR">0</strong>
+                        </div>
+                        <div class="material-item">
+                            <span>SR石</span>
+                            <strong id="trainingMaterialSR">0</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="trainingCharacterList" class="training-character-list"></div>
+
+                <p id="trainingMessage" class="training-message"></p>
+
+                <div class="training-actions">
+                    <button id="trainingBackBtn" type="button">
+                        ホームに戻る
+                    </button>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- キャラクター育成ポップアップ -->
+        <div id="trainingOverlay" class="training-overlay" hidden>
+            <div class="training-modal">
+
+                <div class="training-modal-header">
+                    <h2>キャラクター詳細</h2>
+
+                    <div class="training-header-right">
+                        <div class="training-coin-display">
+                            <span>所持コイン</span>
+                            <strong>🪙 <span id="trainingModalCoins">0</span></strong>
+                        </div>
+
+                        <div class="training-popup-materials">
+                            <span>N石：<strong id="popupMaterialN">0</strong></span>
+                            <span>R石：<strong id="popupMaterialR">0</strong></span>
+                            <span>SR石：<strong id="popupMaterialSR">0</strong></span>
+                        </div>
+
+                        <button id="trainingCloseBtn" class="training-close-btn" type="button">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="training-modal-body">
+
+                    <div class="training-character-preview">
+                        <img id="trainingCharacterImage" src="" alt="">
+                        <p id="trainingCharacterName">キャラを選択してください</p>
+                        <span id="trainingCharacterLevel">Lv. -- / --</span>
+                    </div>
+
+                    <div class="training-stats">
+                        <div class="training-stat">
+                            <span>最大HP</span>
+                            <strong id="trainingHp">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>攻撃力</span>
+                            <strong id="trainingAtk">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>攻撃間隔</span>
+                            <strong id="trainingAtkFast">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>射程</span>
+                            <strong id="trainingRange">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>移動速度</span>
+                            <strong id="trainingFast">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>出撃コスト</span>
+                            <strong id="trainingUnitCost">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>配置Y座標</span>
+                            <strong id="trainingY">---</strong>
+                        </div>
+                        <div class="training-stat">
+                            <span>特性</span>
+                            <strong id="trainingTrait">---</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="training-actions-upgrade">
+
+                    <!-- レベルアップ -->
+                    <div class="training-upgrade">
+                        <p>レベルアップ費用</p>
+                        <strong>🪙 <span id="trainingCost">---</span></strong>
+                        <p id="trainingPopUpText">レベルアップしよう！</p>
+                        <button id="trainingUpgradeBtn" type="button">
+                            レベルアップ
+                        </button>
+                    </div>
+
+                    <!-- 強化 -->
+                    <div class="training-strengthen">
+                        <p>強化素材</p>
+                        <strong id="trainingStrengthenCost">---</strong>
+                        <p id="trainingStrengthenText">強化しよう！</p>
+                        <button id="trainingStrengthenBtn" type="button" disabled>
+                            強化
+                        </button>
+                    </div>
+
+                    <!-- 進化 -->
+                    <div class="training-evolution">
+                        <p>進化条件</p>
+                        <strong id="trainingEvolutionCondition">---</strong>
+                        <p id="trainingEvolutionText">進化して新たな力を手に入れよう！</p>
+                        <button id="trainingEvolutionBtn" type="button" disabled>
+                            進化
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================
+     ガチャ画面
+    ====================== -->
+    <section id="gachaScreen" class="gacha-screen" hidden>
+        <div class="gacha-container">
+
+            <main class="gacha-main">
+
+                <section class="gacha-section">
+
+                    <!-- タイトル・チケット -->
+                    <div class="gacha-section-header">
+                        <h2>🐾 わんこガチャ</h2>
+
+                        <div class="gacha-ticket-display">
+                            <span>🎟️ チケット：</span>
+                            <strong><span id="gachaTickets">0</span> 枚</strong>
+                        </div>
+                    </div>
+
+                    <!-- ガチャバナー -->
+                    <div class="gacha-banner">
+                        <div class="gacha-banner-icon">🎁</div>
+                        <p>どんなわんこが出るかな？</p>
+                    </div>
+
+                    <!-- ガチャボタン -->
+                    <div class="gacha-buttons">
+                        <button id="gachaSingleBtn" type="button">
+                            1回ガチャ
+                            <small>🎟️ 1枚</small>
+                        </button>
+
+                        <button id="gachaTenBtn" type="button" disabled>
+                            10連ガチャ
+                            <small>🎟️ 10枚</small>
+                        </button>
+                    </div>
+
+                    <!-- メッセージ -->
+                    <p id="gachaMessage" class="gacha-message"></p>
+
+                    <!-- ガチャ結果 -->
+                    <div class="gacha-result-area">
+                        <h3>🎉 ガチャ結果</h3>
+
+                        <div id="gachaResultList" class="gacha-result-list">
+                            <p class="gacha-empty">
+                                ガチャを引くと結果が表示されます
+                            </p>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- 戻るボタン -->
+                <div class="gacha-actions">
+                    <button id="gachaBackBtn" type="button">
+                        ホームに戻る
+                    </button>
+                </div>
+
+            </main>
+
+        </div>
+    </section>
+
+    <!-- =====================
+         ステージ選択画面
+    ====================== -->
+    <section id="stageScreen" class="menu-screen stage-screen" hidden>
+        <div class="menu-card">
+            <h2>ステージ選択</h2>
+            <p class="menu-description">挑戦するステージを選ぼう！</p>
+
+            <div class="stage-navigation">
+
+                <button id="prevStagePage" class="stage-arrow" disabled>
+                    ◀
+                </button>
+
+                <div class="stage-grid">
+                    <button class="stage-btn" data-stage="1">
+                        <span class="stage-number">1</span>
+                        <small class="stage-status">解放済み</small>
+                    </button>
+
+                    <button class="stage-btn" data-stage="2" disabled>
+                        <span class="stage-number">2</span>
+                        <small class="stage-status">準備中</small>
+                    </button>
+
+                    <button class="stage-btn" data-stage="3" disabled>
+                        <span class="stage-number">3</span>
+                        <small class="stage-status">準備中</small>
+                    </button>
+                </div>
+
+                <button id="nextStagePage" class="stage-arrow">
+                    ▶
+                </button>
+
+            </div>
+
+            <p id="stagePageInfo" class="stage-page-info">1 / 3</p>
+
+            <button id="backTitleBtn" class="menu-btn secondary-btn" type="button">
+                ホームに戻る
+            </button>
+        </div>
+    </section>
+
+    <!-- =====================
+         戦闘画面
+    ====================== -->
+    <div id="battleScreen" hidden>
+        <main class="game-container">
+
+            <header class="game-header">
+                <div>
+                    <h1>🐶 わんこ大戦争</h1>
+                    <p>わんこ軍団を出撃させて敵の拠点を破壊しよう！</p>
+                </div>
+
+                <button id="restartBtn" class="restart-btn">
+                    リタイア
+                </button>
+            </header>
+
+            <!-- 戦闘フィールド -->
+            <section id="battleField" class="battle-field">
+
+                <!-- ゲーム情報 -->
+                <section class="game-info">
+
+                    <div class="player-info-group">
+                        <div class="info-box">
+                            <span>味方拠点 HP</span>
+                            <strong>
+                                <span id="playerBaseHp">1000</span> / 1000
+                            </strong>
+                        </div>
+
+                        <div class="info-box money-box">
+                            <span>所持金</span>
+                            <strong>
+                                <span id="money">0</span> /
+                                <span id="maxMoney">1000</span>
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="info-box enemy-info-box">
+                        <span>敵拠点 HP</span>
+                        <strong>
+                            <span id="enemyBaseHp">1000</span> /
+                            <span id="enemyBaseMaxHp">1000</span>
+                        </strong>
+                    </div>
+
+                </section>
+
+                <!-- フィールド背景 -->
+                <div class="field-background">
+                    <div class="cloud cloud-1"></div>
+                    <div class="cloud cloud-2"></div>
+                    <div class="hill hill-1"></div>
+                    <div class="hill hill-2"></div>
+                </div>
+
+                <!-- 味方拠点 -->
+                <div id="playerBase" class="base player-base">
+                    <div class="base-icon">🏠</div>
+                    <span class="base-label">味方拠点</span>
+                </div>
+
+                <!-- 敵拠点 -->
+                <div id="enemyBase" class="base enemy-base">
+                    <div class="base-icon">🏰</div>
+                    <span class="base-label">敵拠点</span>
+                </div>
+
+                <!-- 砦スキル・お金アップグレード -->
+                <div class="upgrade-panel">
+
+                    <button id="castleSkillBtn" class="unit-btn" type="button">
+                        <span class="unit-icon">🏰</span>
+                        <span class="unit-cost" id="castleSkillText">スキル</span>
+                    </button>
+
+                    <button id="moneyUpgradeBtn" class="unit-btn" type="button">
+                        <span class="unit-icon">💰</span>
+                        <span class="unit-cost unit-text-gold">
+                            速度UP<br>
+                            <span id="upgradeCost">100円</span>
+                        </span>
+                    </button>
+
+                </div>
+
+                <!-- 出撃メニュー -->
+                <div class="control-panel">
+
+                    <button id="spawnDogBtn" class="unit-btn">
+                        <span class="unit-icon">🐶</span>
+                        <span class="unit-cost">100円</span>
+                    </button>
+
+                    <button id="spawnUnit2Btn" class="unit-btn">
+                        <span class="unit-icon">❔</span>
+                        <span class="unit-cost">???円</span>
+                    </button>
+
+                    <button id="spawnUnit3Btn" class="unit-btn">
+                        <span class="unit-icon">❔</span>
+                        <span class="unit-cost">???円</span>
+                    </button>
+
+                    <button id="spawnUnit4Btn" class="unit-btn" type="button">
+                        <span class="unit-icon">❔</span>
+                        <span class="unit-cost">???円</span>
+                    </button>
+
+                    <button id="spawnUnit5Btn" class="unit-btn" type="button">
+                        <span class="unit-icon">❔</span>
+                        <span class="unit-cost">???円</span>
+                    </button>
+
+                </div>
+
+                <!-- JSでキャラクターを追加 -->
+                <div id="characterLayer" class="character-layer"></div>
+
+                <div class="ground"></div>
+            </section>
+
+            <!-- メッセージ -->
+            <div class="message-area">
+                <p id="gameMessage">出撃ボタンを押してゲーム開始！</p>
+            </div>
+
+            <footer class="game-footer">
+                <p>WANKO BATTLE - JavaScript Practice Game</p>
+            </footer>
+
+            <!-- 勝敗結果ポップアップ -->
+            <div id="resultOverlay" class="result-overlay" hidden>
+                <div class="result-modal">
+
+                    <div id="resultIcon" class="result-icon">🏆</div>
+
+                    <h2 id="resultTitle">STAGE CLEAR!</h2>
+                    <p id="resultMessage">ステージクリア！</p>
+
+                    <!-- 勝利時の報酬を表示する領域 -->
+                    <div id="resultRewards"></div>
+
+                    <div class="result-actions">
+                        <button id="retryBtn" class="result-btn retry-btn" type="button">
+                            もう一度
+                        </button>
+
+                        <button id="resultHomeBtn" class="result-btn result-home-btn" type="button">
+                            ホームに戻る
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+
+</html>
