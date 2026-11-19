@@ -8,7 +8,7 @@ export const characterVariation = {
         rangeValue: 60, //デフォルト60
         fast: 0.5,
         // x: 100, キャラの初期x値
-        y: 0,
+        y: -6,
         cost: 100,
         trait: [],
         rarity: '???',
@@ -24,6 +24,7 @@ export const characterVariation = {
         fast: 0.3,
         // x: 100, キャラの初期x値
         y: 0,
+        size: 100,
         cost: 200,
         trait: [],
         rarity: 'N',
@@ -38,7 +39,8 @@ export const characterVariation = {
         rangeValue: 60, //デフォルト60
         fast: 0.3,
         // x: 100, キャラの初期x値
-        y: 0,
+        y: -8,
+        size: 90,
         cost: 200,
         trait: [],
         rarity: 'N',
@@ -53,7 +55,8 @@ export const characterVariation = {
         rangeValue: 60, //デフォルト60
         fast: 0.7,
         // x: 100, キャラの初期x値
-        y: 0,
+        y: -10,
+        size: 60,
         cost: 150,
         trait: [],
         rarity: 'N',
@@ -68,7 +71,8 @@ export const characterVariation = {
         rangeValue: 60, //デフォルト60
         fast: 0.5,
         // x: 100, キャラの初期x値
-        y: 0,
+        y: -6,
+        size: 75,
         cost: 150,
         trait: ['goldUp'],
         goldMultiValue: 1.2,

@@ -19,8 +19,13 @@
             <p class="menu-subtitle">DOG BATTLE</p>
             <h1>🐶 わんこ大戦争</h1>
             <p class="menu-description">わんこたちと一緒に敵の砦を攻略しよう！</p>
+
             <button id="startBtn" class="menu-btn" type="button">
                 ゲームスタート
+            </button>
+
+            <button id="deleteSaveBtn" class="delete-save-btn" type="button">
+                セーブデータ削除
             </button>
         </div>
     </section>
@@ -410,7 +415,15 @@
     ====================== -->
     <section id="stageScreen" class="menu-screen stage-screen" hidden>
         <div class="menu-card">
-            <h2>ステージ選択</h2>
+
+            <div class="stage-title-header">
+                <h2>ステージ選択</h2>
+
+                <button id="autoSettingBtn" class="auto-setting-btn" type="button">
+                    ⚙ オート設定
+                </button>
+            </div>
+
             <p class="menu-description">挑戦するステージを選ぼう！</p>
 
             <div class="stage-navigation">
@@ -449,6 +462,47 @@
             </button>
         </div>
     </section>
+
+    <!-- オート出撃設定ポップアップ -->
+    <div id="autoSettingOverlay" class="auto-setting-overlay" hidden>
+
+        <div class="auto-setting-modal">
+
+            <div class="auto-modal-header">
+                <h2>🐶 オート出撃設定</h2>
+                <button id="autoSettingCloseBtn" class="auto-modal-close" type="button">
+                    ×
+                </button>
+            </div>
+
+            <p class="auto-modal-description">
+                編成中のわんこから1体選択してください
+            </p>
+
+            <!-- オート登録対象の選択 -->
+            <div id="autoCharacterList" class="auto-character-list">
+
+                <!-- JavaScriptで編成中の5枠を生成 -->
+
+            </div>
+
+            <!-- 登録状態 -->
+            <p id="autoSettingMessage" class="auto-setting-message"></p>
+
+            <!-- 操作ボタン -->
+            <div class="auto-modal-actions">
+                <button id="autoSaveBtn" class="auto-save-btn" type="button">
+                    登録する
+                </button>
+
+                <button id="autoClearBtn" class="auto-clear-btn" type="button">
+                    登録解除
+                </button>
+            </div>
+
+        </div>
+
+    </div>
 
     <!-- =====================
          戦闘画面
@@ -567,6 +621,11 @@
                     </button>
 
                 </div>
+
+                <!-- オート出撃切り替え -->
+                <button id="autoBtn" class="auto-btn" type="button">
+                    AUTO OFF
+                </button>
 
                 <!-- JSでキャラクターを追加 -->
                 <div id="characterLayer" class="character-layer"></div>

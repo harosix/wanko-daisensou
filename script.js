@@ -22,6 +22,8 @@ const titleScreen = document.getElementById('titleScreen');
 // ボタン
 const startBtn = document.getElementById('startBtn');
 
+// セーブデータ削除ボタン
+const deleteSaveBtn = document.getElementById('deleteSaveBtn');
 
 /* ========================================
    ③ ホーム画面
@@ -42,7 +44,6 @@ const homeGachaBtn = document.getElementById('homeGachaBtn');
 
 // 戻るボタン
 const homeBackBtn = document.getElementById('homeBackBtn');
-
 
 /* ========================================
    ④ キャラクター編成画面
@@ -69,7 +70,6 @@ const partyMessage = document.getElementById('partyMessage');
 const partySaveBtn = document.getElementById('partySaveBtn');
 const partyBackBtn = document.getElementById('partyBackBtn');
 
-
 /* ========================================
    ⑤ キャラクター育成画面
 ======================================== */
@@ -93,7 +93,6 @@ const trainingMessage = document.getElementById('trainingMessage');
 
 // 戻るボタン
 const trainingBackBtn = document.getElementById('trainingBackBtn');
-
 
 /* ========================================
    ⑥ キャラクター育成：詳細ポップアップ
@@ -190,6 +189,27 @@ const stagePageInfo = document.getElementById('stagePageInfo');
 // 戻るボタン
 const backTitleBtn = document.getElementById('backTitleBtn');
 
+// オート出撃設定
+// ポップアップを開くボタン
+const autoSettingBtn = document.getElementById('autoSettingBtn');
+
+// ポップアップ全体
+const autoSettingOverlay = document.getElementById('autoSettingOverlay');
+
+// ポップアップを閉じるボタン
+const autoSettingCloseBtn = document.getElementById('autoSettingCloseBtn');
+
+// 編成中のキャラクター表示領域
+const autoCharacterList = document.getElementById('autoCharacterList');
+
+// メッセージ表示
+const autoSettingMessage = document.getElementById('autoSettingMessage');
+
+// 登録ボタン
+const autoSaveBtn = document.getElementById('autoSaveBtn');
+
+// 登録解除ボタン
+const autoClearBtn = document.getElementById('autoClearBtn');
 
 /* ========================================
    ⑨ 戦闘画面：フィールド・拠点
@@ -216,6 +236,8 @@ const maxMoney = document.getElementById('maxMoney');
 // 戦闘メッセージ
 const gameMessage = document.getElementById('gameMessage');
 
+// AUTO出撃切り替えボタン
+const autoBtn = document.getElementById('autoBtn');
 
 /* ========================================
    ⑩ 戦闘画面：操作ボタン
@@ -266,16 +288,23 @@ const resultHomeBtn = document.getElementById('resultHomeBtn');
 let isGame = true;
 // let isBtn = true;
 let popUpStatus;
+// オート出撃の制御変数
+let isAuto = false;
 
 // intervalのリセット処理
 let clearGoEnemy = [];
 // 砦のクールタイムカウントのリセット
 let skillIntervalId = null;
 let partyTimeOutId = null;
+// オート出撃のintervalリセット
+let autoIntervalId = null;
 
 // 出撃キャラクター保管用
 const players = [];
 const enemies = [];
+// オート登録したキャラクター
+let autoCharacterData = null;
+let autoSaveCharacter = null;
 
 // 砦のオブジェクト
 // プレイヤー側の砦情報
@@ -290,10 +319,10 @@ const playerCastle = {
 
 // レベルアップに必要なお金や素材の管理object
 const playerData = {
-    gold: 500,
-    tickets: 5,
+    gold: 0,
+    tickets: 1,
     material: {
-        N: 1,
+        N: 0,
         R: 0,
         SR: 0,
     }
@@ -304,6 +333,9 @@ let enemyX;
 let enemyStartX;
 // 味方拠点の位置
 let playerX;
+
+// 画面のサイズに変化があった際に縮小率を保存する変数 ※デフォルト１
+let battleScale = 1;
 
 // 編成ボタンへ表示するための配列
 let partyMember = ['wanko', null, null, null, null,];
@@ -633,6 +665,7 @@ function stopGame() {
     clearGoEnemy.forEach((value) => {
         clearInterval(value);
     });
+    autoIntervalStop();
     cancelAnimationFrame(animationId);
     clearGoEnemy.length = 0;
 }
@@ -664,6 +697,11 @@ function resetGame() {
     upgradeCost.textContent = '100円';
     // 戦闘画面のメッセージのリセット
     gameMessage.textContent = '出撃ボタンを押してゲーム開始！';
+
+    // オートボタンをoffにする
+    autoBtn.classList.remove('is-active');
+    autoBtn.textContent = 'AUTO OFF';
+    isAuto = false;
 }
 
 // ------------------------------------------------------------
@@ -781,6 +819,17 @@ startBtn.addEventListener('click', () => {
     homeScreen.hidden = false;
 });
 
+// セーブデータ削除ボタン
+deleteSaveBtn.addEventListener('click', () => {
+    if (confirm('本当に削除しますか？')) {
+        localStorage.removeItem('playerDates');
+        window.alert('削除しました');
+        location.reload();
+    } else {
+        window.alert('キャンセルしました');
+    }
+});
+
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // ホームからタイトルへ戻るボタンの処理
 homeBackBtn.addEventListener('click', () => {
@@ -799,6 +848,25 @@ homeStageBtn.addEventListener('click', () => {
 backTitleBtn.addEventListener('click', () => {
     stageScreen.hidden = true;
     homeScreen.hidden = false;
+});
+// ステージ選択画面からオート登録ポップアップ表示
+autoSettingBtn.addEventListener('click', () => {
+    autoCharacterData = autoSaveCharacter;
+    autoSettingOverlay.hidden = false;
+    autoSettingMessage.textContent = 'キャラを選択してください';
+    renderAutoCharacterList();
+});
+// 閉じるボタン
+autoSettingCloseBtn.addEventListener('click', () => {
+    if (autoCharacterData !== autoSaveCharacter) {
+        if (confirm('このまま閉じると登録されませんがよろしいですか？')) {
+
+        } else {
+            return;
+        }
+    }
+    autoCharacterData = autoSaveCharacter;
+    autoSettingOverlay.hidden = true;
 });
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -857,6 +925,8 @@ function startGame() {
 
     stageScreen.hidden = true;
     battleScreen.hidden = false;
+    resizeBattleScreen();
+
     renderSpawnButtons();
     setBattlePosition();
     startMoneyInterval();
@@ -888,8 +958,8 @@ function setBattlePosition() {
     const layerRect = characterLayer.getBoundingClientRect();
 
     // キャラクターの表示領域の端からみて敵の拠点の最初の接触時のx値
-    enemyX = enemyRect.left - layerRect.left;
-    playerX = playerRect.right - layerRect.left;
+    enemyX = (enemyRect.left - layerRect.left) / battleScale;
+    playerX = (playerRect.right - layerRect.left) / battleScale;
     // 敵の出撃位置
     enemyStartX = enemyX - 50;
 }
@@ -906,6 +976,77 @@ function unlockStages(stageId) {
             status.textContent = '解放済み';
         }
     }
+}
+
+// ------------------------------------------------------------
+// オート出撃登録ポップアップの処理
+
+// 登録ボタン
+autoSaveBtn.addEventListener('click', () => {
+    if (autoCharacterData === null) {
+        autoSettingMessage.textContent = 'キャラが選択されていません';
+    } else {
+        autoSaveCharacter = autoCharacterData;
+        saveData();
+        autoSettingMessage.textContent = '登録されました';
+    }
+});
+// 登録解除ボタン
+autoClearBtn.addEventListener('click', () => {
+    autoCharacterData = null;
+    autoSaveCharacter = null;
+    saveData();
+    autoBtnsClassReset();
+    autoSettingMessage.textContent = '選択を解除しました';
+});
+
+// オート登録画面で
+function renderAutoCharacterList() {
+    autoCharacterList.innerHTML = '';
+
+    // 編成中のパーティメンバーを表示
+    savedParty.forEach((character) => {
+        // 親
+        const autoCharacterElement = document.createElement('button');
+        autoCharacterElement.classList.add('auto-character-card');
+
+        // 配列がnullでなければ
+        if (character !== null) {
+            const autoCharacterImg = document.createElement('img');
+            const autoCharacterName = document.createElement('span');
+
+            autoCharacterImg.src = characterVariation[character].image;
+            autoCharacterElement.appendChild(autoCharacterImg);
+            autoCharacterName.textContent = characterVariation[character].name;
+            autoCharacterElement.appendChild(autoCharacterName);
+
+            if (character === autoSaveCharacter) {
+                autoCharacterElement.classList.add('is-selected');
+            }
+
+            // 登録ボタンの処理
+            autoCharacterElement.addEventListener('click', () => {
+                // 全ボタンから選択中のclassを解除
+                autoBtnsClassReset();
+
+                autoCharacterData = character;
+                console.log(autoCharacterData);
+                autoCharacterElement.classList.add('is-selected');
+            });
+        } else {
+            // 中身がnullならボタン押せない
+            autoCharacterElement.disabled = true;
+        }
+
+        autoCharacterList.appendChild(autoCharacterElement);
+    });
+}
+
+// オート登録ポップアップのキャラ選択のエフェクト解除用関数
+function autoBtnsClassReset() {
+    autoCharacterList.querySelectorAll('.auto-character-card').forEach((btn) => {
+        btn.classList.remove('is-selected');
+    });
 }
 
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -986,20 +1127,58 @@ function characterGoBtn(btnElement, classInstance, index) {
         }
 
         const player = classInstance();
-        // プレイヤー出撃制限
-        if (players.length < 10) {
-            if (playerCastle.money < player.cost) {
-                gameMessage.textContent = '所持金が足りません';
-                return;
-            }
-            playerCastle.money -= player.cost;
-            money.textContent = playerCastle.money;
-            players.push(player);
-            player.draw();
-        } else {
-            gameMessage.textContent = 'これ以上出撃できません';
-        }
+        spawnCharacter(player);
     });
+}
+// 手動・AUTO共通の出撃処理
+function spawnCharacter(player) {
+    if (players.length < 10) {
+        if (playerCastle.money < player.cost) {
+            gameMessage.textContent = '所持金が足りません';
+            return;
+        }
+        playerCastle.money -= player.cost;
+        money.textContent = playerCastle.money;
+        players.push(player);
+        player.draw();
+    } else {
+        gameMessage.textContent = 'これ以上出撃できません';
+    }
+}
+
+// オート出撃ボタン
+autoBtn.addEventListener('click', () => {
+    autoBtn.classList.toggle('is-active');
+    if (autoBtn.classList.contains('is-active')) {
+        // オート出撃設定にキャラクターがいれば
+        if (autoSaveCharacter !== null) {
+            autoBtn.textContent = 'AUTO ON';
+            isAuto = true;
+            autoIntervalId = setInterval(() => {
+                const autoCharacterData = createAutoInterval();
+                spawnCharacter(autoCharacterData);
+            }, 1000);
+        } else {
+            autoBtn.classList.remove('is-active');
+            gameMessage.textContent = 'キャラクターが登録されていません';
+        }
+    } else {
+        autoBtn.textContent = 'AUTO OFF';
+        isAuto = false;
+        autoIntervalStop();
+    }
+});
+// オートがオンの時に自動出撃するキャラクターのデータを取得する処理
+function createAutoInterval() {
+    if (!isAuto || autoSaveCharacter === null) return;
+
+    return createCharacter(characterVariation[autoSaveCharacter], autoSaveCharacter);
+}
+
+// オート出撃のintervalのリセット関数
+function autoIntervalStop() {
+    clearInterval(autoIntervalId);
+    autoIntervalId = null;
 }
 
 // エネミーの出撃設定
@@ -1146,8 +1325,8 @@ function beamMakeAnimation() {
     // ビームの高さを計算
     const baseRect = playerBase.getBoundingClientRect();
     const layerRect = characterLayer.getBoundingClientRect();
-    const startY = (baseRect.top - 20 + baseRect.height / 2) - layerRect.top;
-    const groundY = layerRect.height - 85;
+    const startY = ((baseRect.top + baseRect.height / 2) - layerRect.top) / battleScale - 20;
+    const groundY = layerRect.height / battleScale - 85;
     let currentX = 30;
     const distanceX = enemyX - playerX;
     const distanceY = groundY - startY;
@@ -1233,6 +1412,32 @@ function updateSkillDisplay() {
 }
 
 // ------------------------------------------------------------
+// |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// ゲーム中の画面の大小に変更があった時の処理
+// |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// 画面に変化があった際に、座標を計算しなおす処理
+function resizeBattleScreen() {
+    const style = getComputedStyle(battleScreen);
+    const paddingLeft = parseFloat(style.paddingLeft);
+    const paddingRight = parseFloat(style.paddingRight);
+    const paddingTop = parseFloat(style.paddingTop);
+    const paddingBottom = parseFloat(style.paddingBottom);
+
+    const availableWidth = window.innerWidth - paddingLeft - paddingRight;
+    const availableHeight = window.innerHeight - paddingTop - paddingBottom;
+    // ① ブラウザの幅と高さから縮小率を計算
+    const scaleX = availableWidth / 1100;
+    const scaleY = availableHeight / 700;
+    // ② 縮小率を計算
+    battleScale = Math.min(scaleX, scaleY, 1);
+    // ③ transform: scale() を適用
+    const container = document.querySelector('#battleScreen .game-container');
+    container.style.transform = `scale(${battleScale})`;
+}
+window.addEventListener('resize', () => {
+    resizeBattleScreen();
+});
+
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // 編集画面
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -1393,6 +1598,11 @@ partySaveBtn.addEventListener('click', () => {
     if (confirm('保存しますか?')) {
         partyMessage.textContent = '保存しました';
         savedParty = [...partyMember];
+        // 更新したパーティにオート出撃に登録されているキャラが含まれていなければ
+        if (!savedParty.includes(autoSaveCharacter)) {
+            autoSaveCharacter = null;
+            autoCharacterData = autoSaveCharacter;
+        }
         saveData();
     } else {
         partyMessage.textContent = 'キャンセルしました';
@@ -1622,6 +1832,7 @@ function saveData() {
         PossessionCharacter,
         savedParty,
         currentUnlockedStage,
+        autoSaveCharacter,
     }
     localStorage.setItem('playerDates', JSON.stringify(saveData));
 }
@@ -1647,9 +1858,11 @@ function loadData() {
 
     // ステージ解放状況をロード後の状態に書き換える
     currentUnlockedStage = recoveryData.currentUnlockedStage;
-    for(let i = 1; i <= currentUnlockedStage; i++) {
+    for (let i = 1; i <= currentUnlockedStage; i++) {
         unlockStages(i);
     }
+
+    autoSaveCharacter = recoveryData.autoSaveCharacter ?? null;
 }
 
 // 末尾
