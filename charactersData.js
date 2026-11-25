@@ -1,7 +1,7 @@
 export const characterVariation = {
     wanko: {
         name: 'わんこ', // 主人公
-        image: './images/wanko.png',
+        image: './images/players/wanko.png',
         maxHp: 5,
         atk: 1,
         atkFast: 1000,
@@ -9,21 +9,21 @@ export const characterVariation = {
         fast: 0.5,
         coolTime: 2000,
         // x: 100, キャラの初期x値
-        y: -6,
+        y: -10,
         size: 60,
         cost: 100,
         trait: ['mainCharacter'],
-        rarity: '???',
+        rarity: 'N',
         isGacha: false,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 1.2, //1レベル上がるごとに加算するHP増加倍率
-            atkUpLvInterval: 5, //何レベル置きに攻撃力が増えるか
+            hpUpMagnification: 0.8, //1レベル上がるごとに加算するHP増加倍率
+            atkUpLvInterval: 10, //何レベル置きに攻撃力が増えるか
         }
     },
     kumada: {
         name: 'くま田さん',
-        image: './images/kumaWan.png',
+        image: './images/players/kumaWan.png',
         maxHp: 8,
         atk: 2,
         atkFast: 1300,
@@ -31,7 +31,7 @@ export const characterVariation = {
         fast: 0.3,
         coolTime: 4000,
         // x: 100, キャラの初期x値
-        y: 0,
+        y: -5,
         size: 100,
         cost: 200,
         trait: [],
@@ -39,13 +39,13 @@ export const characterVariation = {
         isGacha: true,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 1.2, //1レベル上がるごとに加算するHP増加倍率
+            hpUpMagnification: 0.9, //1レベル上がるごとに加算するHP増加倍率
             atkUpLvInterval: 3, //何レベル置きに攻撃力が増えるか
         }
     },
     kamekiti: {
         name: 'かめ吉くん',
-        image: './images/kameWan.png',
+        image: './images/players/kameWan.png',
         maxHp: 12,
         atk: 1,
         atkFast: 2000,
@@ -53,29 +53,29 @@ export const characterVariation = {
         fast: 0.3,
         coolTime: 4000,
         // x: 100, キャラの初期x値
-        y: -8,
+        y: -10,
         size: 90,
-        cost: 200,
+        cost: 150,
         trait: [],
         rarity: 'N',
         isGacha: true,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 1.5, //1レベル上がるごとに加算するHP増加倍率
+            hpUpMagnification: 1.3, //1レベル上がるごとに加算するHP増加倍率
             atkUpLvInterval: 15, //何レベル置きに攻撃力が増えるか
         }
     },
     usami: {
         name: 'うさ美ちゃん',
-        image: './images/usaWan.png',
+        image: './images/players/usaWan.png',
         maxHp: 3,
         atk: 1,
-        atkFast: 500,
+        atkFast: 700,
         rangeValue: 60, //デフォルト60
         fast: 0.7,
         coolTime: 2000,
         // x: 100, キャラの初期x値
-        y: -10,
+        y: -12,
         size: 60,
         cost: 100,
         trait: [],
@@ -83,13 +83,13 @@ export const characterVariation = {
         isGacha: true,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 0.9, //1レベル上がるごとに加算するHP増加倍率
+            hpUpMagnification: 0.6, //1レベル上がるごとに加算するHP増加倍率
             atkUpLvInterval: 10, //何レベル置きに攻撃力が増えるか
         }
     },
     narikinWan: {
         name: '成金ワン',
-        image: './images/narikinWan.png',
+        image: './images/players/narikinWan.png',
         maxHp: 3,
         atk: 1,
         atkFast: 1400,
@@ -97,7 +97,7 @@ export const characterVariation = {
         fast: 0.5,
         coolTime: 2000,
         // x: 100, キャラの初期x値
-        y: -6,
+        y: -9,
         size: 75,
         cost: 150,
         trait: ['goldUp'],
@@ -110,14 +110,14 @@ export const characterVariation = {
         isGacha: true,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 1, //1レベル上がるごとに加算するHP増加倍率
+            hpUpMagnification: 0.8, //1レベル上がるごとに加算するHP増加倍率
             atkUpLvInterval: 10, //何レベル置きに攻撃力が増えるか
         }
         //このキャラをロストするとお金をドロップする
     },
     wanKB48: {
         name: 'わんKB48',
-        image: './images/wanKB48.png',
+        image: './images/players/wanKB48.png',
         maxHp: 5,
         atk: 1,
         atkFast: 950,
@@ -125,7 +125,7 @@ export const characterVariation = {
         fast: 0.4,
         coolTime: 3000,
         // x: 100, キャラの初期x値
-        y: -6,
+        y: -10,
         size: 75,
         cost: 300,
         trait: ['stopAttack', 'longRange'],
@@ -139,17 +139,17 @@ export const characterVariation = {
         isGacha: true,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 1, //1レベル上がるごとに加算するHP増加倍率
+            hpUpMagnification: 0.7, //1レベル上がるごとに加算するHP増加倍率
             atkUpLvInterval: 6, //何レベル置きに攻撃力が増えるか
         }
         // 攻撃時一定確率で動きを止める
     },
     herikopuWan: {
         name: 'ヘリコプワン',
-        image: './images/herikopuWan.png',
+        image: './images/players/herikopuWan.png',
         maxHp: 20,
         atk: 1,
-        atkFast: 800,
+        atkFast: 850,
         rangeValue: 100, //デフォルト60
         fast: 0.5,
         coolTime: 6000,
@@ -162,7 +162,7 @@ export const characterVariation = {
         isGacha: true,
         // 下記成長倍率
         status: {
-            hpUpMagnification: 1.1, //1レベル上がるごとに加算するHP増加倍率
+            hpUpMagnification: 0.9, //1レベル上がるごとに加算するHP増加倍率
             atkUpLvInterval: 5, //何レベル置きに攻撃力が増えるか
         }
     }

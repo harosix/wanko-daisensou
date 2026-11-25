@@ -5,11 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>わんこ大戦争</title>
+    <link rel="icon" href="images/players/wanko.png" type="image/png">
     <link rel="stylesheet" href="style.css">
     <script type="module" src="script.js"></script>
 </head>
 
 <body>
+
+    <!-- 起動画面 -->
+    <div id="bootScreen" class="boot-screen">
+
+        <button id="bootBtn" class="boot-content" type="button">
+
+            <div class="boot-logo">🐾</div>
+
+            <h1>Haro's Game</h1>
+
+            <p class="boot-subtitle">
+                INDEPENDENT GAME STUDIO
+            </p>
+
+            <p class="boot-click">
+                CLICK TO START
+            </p>
+
+            <p class="boot-guide">
+                クリックしてゲームを始める
+            </p>
+
+        </button>
+
+    </div>
 
     <!-- =====================
          タイトル画面
@@ -149,6 +175,8 @@
                         所持キャラを選択して編成しよう！
                         編成中のキャラを押すと外せるよ。
                     </p>
+
+                    <p id="partyMessage" class="party-message"></p>
                 </section>
 
                 <!-- 所持キャラクター -->
@@ -162,8 +190,6 @@
 
                     <div id="ownedCharacterList" class="owned-character-list"></div>
                 </section>
-
-                <p id="partyMessage" class="party-message"></p>
 
                 <div class="party-actions">
                     <button id="partySaveBtn" class="party-save-btn" type="button">
@@ -315,7 +341,7 @@
                     <!-- 強化 -->
                     <div class="training-strengthen">
                         <p>強化素材</p>
-                        <strong id="trainingStrengthenCost">---</strong>
+                        <strong>💎<span id="trainingStrengthenCost">---</span></strong>
                         <p id="trainingStrengthenText">強化しよう！</p>
                         <button id="trainingStrengthenBtn" type="button" disabled>
                             強化
@@ -508,7 +534,6 @@
             <header class="game-header">
                 <div>
                     <h1>🐶 わんこ大戦争</h1>
-                    <p>わんこ軍団を出撃させて敵の拠点を破壊しよう！</p>
                 </div>
 
                 <button id="restartBtn" class="restart-btn">
@@ -548,14 +573,6 @@
                     </div>
 
                 </section>
-
-                <!-- フィールド背景 -->
-                <div class="field-background">
-                    <div class="cloud cloud-1"></div>
-                    <div class="cloud cloud-2"></div>
-                    <div class="hill hill-1"></div>
-                    <div class="hill hill-2"></div>
-                </div>
 
                 <!-- 味方拠点 -->
                 <div id="playerBase" class="base player-base">
@@ -622,6 +639,11 @@
 
                 </div>
 
+                <!-- 倍速切り替え -->
+                <button id="gameSpeedBtn" class="game-speed-btn" type="button">
+                    ▶ ×1
+                </button>
+
                 <!-- オート出撃切り替え -->
                 <button id="autoBtn" class="auto-btn" type="button">
                     AUTO OFF
@@ -670,6 +692,25 @@
         </main>
     </div>
 
+    <!-- 機能解放ポップアップ -->
+    <div id="unlockOverlay" class="unlock-overlay" hidden>
+        <div class="unlock-popup">
+            <p class="unlock-label">NEW FUNCTION</p>
+            <h2>新機能解放！</h2>
+
+            <div id="unlockIcon" class="unlock-icon">💎</div>
+
+            <h3 id="unlockTitle">キャラクター強化</h3>
+
+            <p id="unlockMessage">
+                キャラクターの強化機能が解放されました！
+            </p>
+
+            <button id="unlockCloseBtn" class="unlock-close-btn">
+                OK
+            </button>
+        </div>
+    </div>
 </body>
 
 </html>

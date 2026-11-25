@@ -2,13 +2,13 @@ export const enemyVariation = {
     // x値はscript側でクラスのインスタンス作成時に直接代入
     snake: {
         name: 'ヘビー',
-        image: './images/heavy.png',
+        image: './images/enemies/heavy.png',
         maxHp: 5,
         atk: 1,
         atkFast: 1000, // 攻撃速度1000デフォルト
         rangeValue: 60, //デフォルト60
         fast: -0.5, // 移動速度0.5デフォルト
-        y: 0,
+        y: -5,
         size: 60,
         trait: [],
         dropMoney: 40,
@@ -30,7 +30,7 @@ export const enemyVariation = {
         name: 'ピエロ',
         image: '🤡',
         maxHp: 15,
-        atk: 2,
+        atk: 1,
         atkFast: 800,
         rangeValue: 60, //デフォルト60
         fast: -0.6,
@@ -41,33 +41,33 @@ export const enemyVariation = {
     },
     daibutuSan: {
         name: '大仏さん',
-        image: './images/daibutuSan.png',
+        image: './images/enemies/daibutuSan.png',
         maxHp: 40,
         atk: 2,
         atkFast: 1000,
         rangeValue: 60, //デフォルト60
         fast: -0.5,
-        y: 0,
+        y: -5,
         size: 100,
         trait: [],
         dropMoney: 200,
     },
     saruoKun: {
         name: '猿男君',
-        image: './images/saruoKun.png',
+        image: './images/enemies/saruoKun.png',
         maxHp: 50,
         atk: 2,
         atkFast: 900,
         rangeValue: 60, //デフォルト60
         fast: -0.7,
-        y: 0,
+        y: -5,
         size: 90,
         trait: [],
         dropMoney: 250,
     },
     kanikuraSan: {
         name: 'カニ蔵さん',
-        image: './images/kanikuraSan.png',
+        image: './images/enemies/kanikuraSan.png',
         maxHp: 80,
         atk: 1,
         atkFast: 1000,
@@ -80,7 +80,7 @@ export const enemyVariation = {
     },
     washi: {
         name: 'わっしー',
-        image: './images/washi.png',
+        image: './images/enemies/washi.png',
         maxHp: 30,
         atk: 3,
         atkFast: 800,

@@ -8,10 +8,19 @@ export const stageVariation = {
             { key: 'snake', count: 6 },
         ],
         clearResult: {
-            gold: 20,
+            gold: 40,
             items: [
                 { key: 'dogStone', count: 1 },
             ],
+        },
+        stageProperty: {
+            image: {
+                backImage: './images/backgrounds/battleField/back/stage1.png',
+                groundImage: './images/backgrounds/battleField/ground/ground1.png',
+            },
+            bgm: {
+                stageBgm: './bgm/battle/battleBgm1.mp3',
+            }
         },
     },
     stage2: {
@@ -24,10 +33,19 @@ export const stageVariation = {
             { key: 'hentai', count: 6 },
         ],
         clearResult: {
-            gold: 25,
+            gold: 70,
             items: [
                 { key: 'dogStone', count: 1 },
             ],
+        },
+        stageProperty: {
+            image: {
+                backImage: './images/backgrounds/battleField/back/stage1.png',
+                groundImage: './images/backgrounds/battleField/ground/ground1.png',
+            },
+            bgm: {
+                stageBgm: './bgm/battle/battleBgm1.mp3',
+            }
         },
     },
     stage3: {
@@ -41,43 +59,70 @@ export const stageVariation = {
             { key: 'pierrot', count: 5 },
         ],
         clearResult: {
-            gold: 30,
+            gold: 100,
             items: [
                 { key: 'dogStone', count: 1 },
             ],
         },
+        stageProperty: {
+            image: {
+                backImage: './images/backgrounds/battleField/back/stage1.png',
+                groundImage: './images/backgrounds/battleField/ground/ground1.png',
+            },
+            bgm: {
+                stageBgm: './bgm/battle/battleBgm1.mp3',
+            }
+        },
     },
     stage4: {
         id: 4,
-        stageMaxHp: 3000,
-        stageHp: 3000,
+        stageMaxHp: 2500,
+        stageHp: 2500,
         spawnLimit: 15,
         enemyWaves: [
             { key: 'pierrot', count: 12 },
             { key: 'daibutuSan', count: 3 },
         ],
         clearResult: {
-            gold: 50,
+            gold: 120,
             items: [
                 { key: 'dogStone', count: 1 },
             ],
         },
+        stageProperty: {
+            image: {
+                backImage: './images/backgrounds/battleField/back/stage2.png',
+                groundImage: './images/backgrounds/battleField/ground/ground1.png',
+            },
+            bgm: {
+                stageBgm: './bgm/battle/battleBgm1.mp3',
+            }
+        },
     },
     stage5: {
         id: 5,
-        stageMaxHp: 4000,
-        stageHp: 4000,
+        stageMaxHp: 3000,
+        stageHp: 3000,
         spawnLimit: 20,
         enemyWaves: [
-            { key: 'pierrot', count: 5},
-            { key: 'daibutuSan', count: 10},
-            { key: 'saruoKun', count: 5},
+            { key: 'pierrot', count: 5 },
+            { key: 'daibutuSan', count: 10 },
+            { key: 'saruoKun', count: 5 },
         ],
         clearResult: {
-            gold: 60,
+            gold: 160,
             items: [
                 { key: 'dogStone', count: 1 },
             ],
+        },
+        stageProperty: {
+            image: {
+                backImage: './images/backgrounds/battleField/back/stage2.png',
+                groundImage: './images/backgrounds/battleField/ground/ground1.png',
+            },
+            bgm: {
+                stageBgm: './bgm/battle/battleBgm1.mp3',
+            }
         },
     },
     stage6: {
@@ -86,15 +131,24 @@ export const stageVariation = {
         stageHp: 5000,
         spawnLimit: 20,
         enemyWaves: [
-            { key: 'daibutuSan', count: 10},
-            { key: 'saruoKun', count: 5},
-            { key: 'kanikuraSan', count: 5},
+            { key: 'daibutuSan', count: 10 },
+            { key: 'saruoKun', count: 5 },
+            { key: 'kanikuraSan', count: 5 },
         ],
         clearResult: {
-            gold: 70,
+            gold: 200,
             items: [
                 { key: 'dogStone', count: 1 },
             ],
+        },
+        stageProperty: {
+            image: {
+                backImage: './images/backgrounds/battleField/back/stage2.png',
+                groundImage: './images/backgrounds/battleField/ground/ground1.png',
+            },
+            bgm: {
+                stageBgm: './bgm/battle/battleBgm1.mp3',
+            }
         },
     },
 };

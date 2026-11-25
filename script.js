@@ -12,9 +12,17 @@ import { PossessionCharacter } from './ownedCharacters.js';
 const stages = Object.values(stageVariation);
 
 /* ========================================
+   起動画面
+======================================== */
+// 起動画面
+const bootScreen = document.getElementById('bootScreen');
+
+// 起動ボタン
+const bootBtn = document.getElementById('bootBtn');
+
+/* ========================================
    ② タイトル画面
 ======================================== */
-
 // 画面
 const titleScreen = document.getElementById('titleScreen');
 
@@ -27,7 +35,6 @@ const deleteSaveBtn = document.getElementById('deleteSaveBtn');
 /* ========================================
    ③ ホーム画面
 ======================================== */
-
 // 画面
 const homeScreen = document.getElementById('homeScreen');
 
@@ -47,7 +54,6 @@ const homeBackBtn = document.getElementById('homeBackBtn');
 /* ========================================
    ④ キャラクター編成画面
 ======================================== */
-
 // 画面
 const partyScreen = document.getElementById('partyScreen');
 
@@ -72,7 +78,6 @@ const partyBackBtn = document.getElementById('partyBackBtn');
 /* ========================================
    ⑤ キャラクター育成画面
 ======================================== */
-
 // 画面
 const trainingScreen = document.getElementById('trainingScreen');
 
@@ -96,7 +101,6 @@ const trainingBackBtn = document.getElementById('trainingBackBtn');
 /* ========================================
    ⑥ キャラクター育成：詳細ポップアップ
 ======================================== */
-
 // ポップアップ
 const trainingOverlay = document.getElementById('trainingOverlay');
 
@@ -143,11 +147,9 @@ const trainingEvolutionCondition = document.getElementById('trainingEvolutionCon
 const trainingEvolutionText = document.getElementById('trainingEvolutionText');
 const trainingEvolutionBtn = document.getElementById('trainingEvolutionBtn');
 
-
 /* ========================================
    ⑦ ガチャ画面
 ======================================== */
-
 // 画面
 const gachaScreen = document.getElementById('gachaScreen');
 
@@ -167,11 +169,9 @@ const gachaResultList = document.getElementById('gachaResultList');
 // 戻るボタン
 const gachaBackBtn = document.getElementById('gachaBackBtn');
 
-
 /* ========================================
    ⑧ ステージ選択画面
 ======================================== */
-
 // 画面
 const stageScreen = document.getElementById('stageScreen');
 
@@ -213,11 +213,11 @@ const autoClearBtn = document.getElementById('autoClearBtn');
 /* ========================================
    ⑨ 戦闘画面：フィールド・拠点
 ======================================== */
-
 // 画面・フィールド
 const battleScreen = document.getElementById('battleScreen');
 const battleField = document.getElementById('battleField');
 const characterLayer = document.getElementById('characterLayer');
+const ground = document.querySelector('.ground');
 
 // 味方・敵の拠点
 const playerBase = document.getElementById('playerBase');
@@ -235,13 +235,9 @@ const maxMoney = document.getElementById('maxMoney');
 // 戦闘メッセージ
 const gameMessage = document.getElementById('gameMessage');
 
-// AUTO出撃切り替えボタン
-const autoBtn = document.getElementById('autoBtn');
-
 /* ========================================
    ⑩ 戦闘画面：操作ボタン
 ======================================== */
-
 // 砦スキル
 const castleSkillBtn = document.getElementById('castleSkillBtn');
 const castleSkillText = document.getElementById('castleSkillText');
@@ -256,8 +252,12 @@ const spawnUnit2Btn = document.getElementById('spawnUnit2Btn');
 const spawnUnit3Btn = document.getElementById('spawnUnit3Btn');
 const spawnUnit4Btn = document.getElementById('spawnUnit4Btn');
 const spawnUnit5Btn = document.getElementById('spawnUnit5Btn');
-// キャラクター出撃ボタンのクールタイム用
-const overlays = document.querySelectorAll('.control-panel .cooldown-overlay');
+
+// 倍速切り替え
+const gameSpeedBtn = document.getElementById('gameSpeedBtn');
+
+// AUTO出撃切り替えボタン
+const autoBtn = document.getElementById('autoBtn');
 
 // リタイアボタン
 const restartBtn = document.getElementById('restartBtn');
@@ -265,7 +265,6 @@ const restartBtn = document.getElementById('restartBtn');
 /* ========================================
    ⑪ 勝敗結果ポップアップ
 ======================================== */
-
 // ポップアップ本体
 const resultOverlay = document.getElementById('resultOverlay');
 
@@ -279,6 +278,61 @@ const resultRewards = document.getElementById('resultRewards');
 const retryBtn = document.getElementById('retryBtn');
 const resultHomeBtn = document.getElementById('resultHomeBtn');
 
+/* ========================================
+   ⑫ 機能解放ポップアップ関連 
+======================================== */
+// 機能解放ポップアップの要素取得
+const unlockOverlay = document.getElementById('unlockOverlay');
+const unlockIcon = document.getElementById('unlockIcon');
+const unlockTitle = document.getElementById('unlockTitle');
+const unlockMessage = document.getElementById('unlockMessage');
+const unlockCloseBtn = document.getElementById('unlockCloseBtn');
+
+// ステージクリア時の機能解放のポップアップを書き換える処置
+function unlockFunction(icon, title, message) {
+    unlockOverlay.hidden = false;
+    unlockIcon.textContent = icon;
+    unlockTitle.textContent = title;
+    unlockMessage.textContent = message;
+}
+
+// ポップアップのokボタンを押すと通知を閉じる処理
+unlockCloseBtn.addEventListener('click', () => {
+    unlockOverlay.hidden = true;
+});
+
+/* ========================================
+   ⑬ BGM関連 
+======================================== */
+// タイトル画面のBGM
+const titleBgm = new Audio('./bgm/title.mp3');
+titleBgm.volume = 0.3;
+titleBgm.loop = true;
+// ホーム画面のBGM
+const homeBgm = new Audio('./bgm/home.mp3');
+homeBgm.volume = 0.3;
+homeBgm.loop = true;
+// ガチャ画面のBGM
+const gachaBgm = new Audio('./bgm/gacha.mp3');
+gachaBgm.volume = 0.3;
+gachaBgm.loop = true;
+
+// バトル画面のBGM
+const battleBgm = new Audio();
+battleBgm.volume = 0.3;
+battleBgm.loop = true;
+
+// リザルト画面のBGM
+const resultBgm = new Audio('./bgm/battle/result/resultBgm.mp3');
+resultBgm.volume = 0.1;
+resultBgm.loop = true;
+
+// BGMを停止させる処理
+function bgmChange(stopBgm, startBgm) {
+    stopBgm.pause();
+    stopBgm.currentTime = 0;
+    startBgm.play();
+}
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 // ------------------------------------------------------------
@@ -291,13 +345,9 @@ let popUpStatus;
 // オート出撃の制御変数
 let isAuto = false;
 
-// intervalのリセット処理
-let clearGoEnemy = [];
-// 砦のクールタイムカウントのリセット
-let skillIntervalId = null;
-let partyTimeOutId = null;
-// オート出撃のintervalリセット
-let autoIntervalId = null;
+// ゲーム速度
+let gameSpeed = 1;
+let lastTime = null;
 
 // 出撃キャラクター保管用
 const players = [];
@@ -319,10 +369,10 @@ const playerCastle = {
 
 // レベルアップに必要なお金や素材の管理object
 const playerData = {
-    gold: 100,
-    tickets: 3,
+    gold: 10000,
+    tickets: 10,
     material: {
-        N: 0,
+        N: 10,
         R: 0,
         SR: 0,
     }
@@ -348,7 +398,6 @@ let currentStage;
 let currentStagePage = 1;
 // ステージの開放状況を保存する変数
 let currentUnlockedStage = 1;
-
 
 // データ復元
 loadData();
@@ -400,6 +449,7 @@ class Character {
                 duration: 200,
             },
         )
+        this.moveAttack.playbackRate = gameSpeed;
     }
 
     // キャラの描写処理
@@ -443,8 +493,11 @@ class Character {
             this.moveAnimate.play();
             this.isMoving = true;
         }
-
-        this.x += this.fast;
+        // ゲームスピードに変更があった場合に入れる
+        if (this.moveAnimate.playbackRate !== gameSpeed) {
+            this.moveAnimate.playbackRate = gameSpeed;
+        }
+        this.x += this.fast * gameSpeed;
         this.character.style.left = `${this.x}px`;
     }
 }
@@ -483,7 +536,7 @@ class Player extends Character {
         // 接敵しているか確認
         if (target !== undefined) {
             // 前回の攻撃から１秒以上経過してるか
-            if (now - this.lateAttack >= this.atkFast) {
+            if (now - this.lateAttack >= this.atkFast / gameSpeed) {
                 target.hp -= this.atk;
                 this.lateAttack = now;
                 this.attackAnimation();
@@ -497,19 +550,24 @@ class Player extends Character {
                     return;
                 }
                 // 前回の攻撃から１秒以上経過しているか
-                if (now - this.lateAttack >= this.atkFast) {
+                if (now - this.lateAttack >= this.atkFast / gameSpeed) {
                     currentStage.hp -= this.atk * 10;
                     this.lateAttack = now;
                     this.attackAnimation();
                     // 敵拠点のhpが0ならゲームクリア
                     if (currentStage.hp <= 0) {
                         currentStage.hp = Math.max(0, currentStage.hp);
+                        const previousUnlockedStage = currentUnlockedStage;
                         const nextStageId = currentStage.id + 1;
                         currentUnlockedStage = Math.max(currentUnlockedStage, nextStageId)
                         stopGame();
                         const clearDrop = giveClearReward();
                         saveData();
                         gameResult('🏆', 'STAGE CLEAR!', '次のステージに挑戦しよう！', 'ステージ選択へ', true, clearDrop);
+                        // 強化機能 追加時の通知
+                        if (previousUnlockedStage < 4 && currentUnlockedStage >= 4) {
+                            unlockFunction('💎', 'キャラクター強化', 'キャラクターの強化機能が解放されました！');
+                        }
                     }
                     enemyBaseHp.textContent = currentStage.hp;
                 }
@@ -573,7 +631,7 @@ class Enemy extends Character {
         // プレイヤーに接触しているか
         if (target !== undefined) {
             // 前回の攻撃から一秒以上たっているか
-            if (now - this.lateAttack >= this.atkFast) {
+            if (now - this.lateAttack >= this.atkFast / gameSpeed) {
                 target.hp -= this.atk;
                 this.lateAttack = now;
                 this.attackAnimation();
@@ -589,7 +647,7 @@ class Enemy extends Character {
             if (playerX >= this.x - (this.atkRange - 60)) {
                 if (!isGame) return;
                 // 前回の攻撃から1秒以上経過していたら
-                if (now - this.lateAttack >= this.atkFast) {
+                if (now - this.lateAttack >= this.atkFast / gameSpeed) {
                     playerCastle.hp -= this.atk * 10;
                     this.lateAttack = now;
                     this.attackAnimation();
@@ -608,13 +666,14 @@ class Enemy extends Character {
 
 // ステージのクラス
 class Stage {
-    constructor(id, maxHp, hp, spawnLimit, enemyWaves, clearResult) {
+    constructor(id, maxHp, hp, spawnLimit, enemyWaves, clearResult, stageProperty) {
         this.id = id;
         this.maxHp = maxHp;
         this.hp = hp;
         this.spawnLimit = spawnLimit;
         this.enemyWaves = enemyWaves;
         this.clearResult = clearResult;
+        this.stageProperty = stageProperty;
     }
 }
 // ステージインスタンスの生成関数
@@ -626,7 +685,20 @@ function createStage(data) {
         data.spawnLimit,
         data.enemyWaves,
         data.clearResult,
+        data.stageProperty,
     );
+}
+
+// ステージの背景と地面を変更する処理
+function changeStageImage() {
+    battleField.style.backgroundImage = `url('${currentStage.stageProperty.image.backImage}')`;
+    ground.style.backgroundImage = `url('${currentStage.stageProperty.image.groundImage}')`;
+}
+// ステージのBGMを変更する処理
+function changeStageBgm() {
+    if (currentStage.stageProperty.bgm.stageBgm === '') return;
+    battleBgm.src = currentStage.stageProperty.bgm.stageBgm;
+    battleBgm.play();
 }
 
 // プレイヤーの所持金を表示する関数
@@ -666,13 +738,11 @@ let animationId;
 // 自動処理のリセット
 function stopGame() {
     isGame = false;
-    // intervalのリセット
-    clearGoEnemy.forEach((value) => {
-        clearInterval(value);
-    });
+    // 戦闘BGMを停止
+    battleBgm.pause();
+    battleBgm.currentTime = 0;
     autoIntervalStop();
     cancelAnimationFrame(animationId);
-    clearGoEnemy.length = 0;
 }
 // 値のリセット
 function resetGame() {
@@ -690,23 +760,30 @@ function resetGame() {
     players.length = 0;
     // 敵の出撃している保存用配列のリセット
     enemies.length = 0;
+    enemyGoCount = 0;
+    enemyElapsedTime = 0;
     // キャラと敵の表示をリセット
     characterLayer.innerHTML = '';
     // 砦のスキルのクールタイムのリセット
-    nextSkillTime = 0;
-    clearInterval(skillIntervalId);
+    skillRemainingTime = 0;
     castleSkillText.textContent = 'スキル';
     // 所持金の増加速度アップ
     increaseGold = 1;
     increaseGoldLevel = 1;
+    moneyElapsedTime = 0;
     upgradeCost.textContent = '100円';
     // 戦闘画面のメッセージのリセット
     gameMessage.textContent = '出撃ボタンを押してゲーム開始！';
 
+    // 倍速ボタンのリセット
+    gameSpeed = 1;
+    lastTime = null;
+    gameSpeedBtn.classList.remove('active');
+    gameSpeedBtn.textContent = '▶ ×1';
     // オートボタンをoffにする
     autoBtn.classList.remove('is-active');
     autoBtn.textContent = 'AUTO OFF';
-    isAuto = false;
+    autoIntervalStop();
     // 出撃のクールタイムをリセット
     lastSpawnTimes = {};
 }
@@ -719,6 +796,7 @@ function gameResult(icon, title, message, btnText, isWin, drops) {
     popUpStatus = isWin;
     // 勝利か敗北で表示
     resultOverlay.hidden = false;
+    resultBgm.play();
     // 以下は勝利か敗北でテキスト変更
     resultIcon.textContent = icon;
     resultTitle.textContent = title;
@@ -784,6 +862,8 @@ function renderClearRewards(drops) {
 
 // 戦闘終了時のリトライボタンの処理
 retryBtn.addEventListener('click', () => {
+    resultBgm.pause();
+    resultBgm.currentTime = 0;
     battleScreen.hidden = true;
     resultOverlay.hidden = true;
     setTimeout(() => {
@@ -803,12 +883,14 @@ resultHomeBtn.addEventListener('click', () => {
     } else {
         homeScreen.hidden = false;
     }
+    bgmChange(resultBgm, homeBgm);
 });
 
 // リタイアボタン
 restartBtn.addEventListener('click', () => {
     if (confirm('リタイアしますか？')) {
         stopGame();
+        homeBgm.play();
         battleScreen.hidden = true;
         homeScreen.hidden = false;
     }
@@ -821,10 +903,20 @@ restartBtn.addEventListener('click', () => {
 // タイトル画面
 // true = 非表示 false = 表示
 
+// クリックすると徐々にタイトル画面へ
+bootBtn.addEventListener('click', () => {
+    bootScreen.classList.add('fade-out');
+    titleBgm.play();
+    setTimeout(() => {
+        bootScreen.hidden = true;
+    }, 1500);
+}, { once: true });
+
 // スタートボタンを押すとホーム画面へ
 startBtn.addEventListener('click', () => {
     titleScreen.hidden = true;
     homeScreen.hidden = false;
+    bgmChange(titleBgm, homeBgm);
 });
 
 // セーブデータ削除ボタン
@@ -843,6 +935,7 @@ deleteSaveBtn.addEventListener('click', () => {
 homeBackBtn.addEventListener('click', () => {
     titleScreen.hidden = false;
     homeScreen.hidden = true;
+    bgmChange(homeBgm, titleBgm);
 });
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -899,9 +992,18 @@ partyBackBtn.addEventListener('click', () => {
 homeTrainingBtn.addEventListener('click', () => {
     homeScreen.hidden = true;
     trainingScreen.hidden = false;
+    // キャラクターの描写関数
     renderTrainingCharacters();
+    // 所持金の更新
     updateGoldDisplay();
+    // 素材の更新
     updateMaterialDisplay();
+    // レベルキャップの解放処理
+    unlockLevelUp();
+    // ステージ4以降強化機能解禁
+    unlockEnhance();
+    // ステージ15以降進化機能解禁
+    unlockEvolution();
 });
 
 // キャラ育成画面からホーム画面
@@ -910,6 +1012,41 @@ trainingBackBtn.addEventListener('click', () => {
     homeScreen.hidden = false;
 });
 
+// 強化機能の解禁条件
+function unlockEnhance() {
+    if (currentUnlockedStage >= 4) {
+        trainingStrengthenBtn.disabled = false;
+
+        // 強化レベルの解放条件
+        if (currentUnlockedStage >= 9) {
+            return 10;
+        } else {
+            return 5;
+        }
+    } else {
+        trainingStrengthenBtn.disabled = true;
+        return 0;
+    }
+}
+// レベルアップの解禁条件
+function unlockLevelUp() {
+    if (currentUnlockedStage >= 9) {
+        return { maxLevel: 15, message: 'coming soon' };
+    } else if (currentUnlockedStage >= 5) {
+        return { maxLevel: 10, message: 'ステージ8でレベルキャップ解放' };
+    } else {
+        return { maxLevel: 5, message: 'ステージ4でレベルキャップ解放' };
+    }
+}
+// 進化の解禁条件
+function unlockEvolution() {
+    if (currentUnlockedStage >= 15) {
+        trainingEvolutionBtn.disabled = false;
+    } else {
+        trainingEvolutionBtn.disabled = true;
+    }
+}
+
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // ホーム画面からガチャ画面
 homeGachaBtn.addEventListener('click', () => {
@@ -917,12 +1054,14 @@ homeGachaBtn.addEventListener('click', () => {
     gachaScreen.hidden = false;
     gachaMessage.textContent = '';
     gachaResultList.innerHTML = '';
+    bgmChange(homeBgm, gachaBgm);
 });
 
 // ガチャ画面からホーム画面
 gachaBackBtn.addEventListener('click', () => {
     gachaScreen.hidden = true;
     homeScreen.hidden = false;
+    bgmChange(gachaBgm, homeBgm);
 });
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -935,29 +1074,26 @@ function startGame() {
     stageScreen.hidden = true;
     battleScreen.hidden = false;
     resizeBattleScreen();
+    changeStageImage();
+    changeStageBgm();
 
     renderSpawnButtons();
     setBattlePosition();
-    startMoneyInterval();
-    enemyGoSet();
-    gameLoop();
+    animationId = requestAnimationFrame(gameLoop);
 }
 
 // ステージ選択画面から実際にステージを選択すると戦闘画面へ移行する
 stageBtns.forEach((stageBtn, index) => {
     stageBtn.addEventListener('click', () => {
-        // // htmlからステージのidを取得
-        // const stageId = Number(stageBtn.dataset.stage);
-        // // stageIdを基にstagesの配列からステージの情報を取得
-        // const stageSelect = stages.find((stage) => {
-        //     return stage.id === stageId;
-        // });
         const stageIndex = (currentStagePage - 1) * 3 + index;
         const stageSelect = stages[stageIndex];
-        // 選択されたステージのデータからStageインスタンスを生成して代入
+        // ステージの情報がなければ処理終了
         if (stageSelect === undefined) {
             return;
         }
+        homeBgm.pause();
+        homeBgm.currentTime = 0;
+        // 選択されたステージのデータからStageインスタンスを生成して代入
         currentStage = createStage(stageSelect);
         startGame();
     });
@@ -1018,20 +1154,6 @@ function setBattlePosition() {
     enemyStartX = enemyX - 50;
 }
 
-// 解放済みのステージのテキストを変更する関数
-function unlockStages(stageId) {
-    const nextStageBtn = [...stageBtns].find((btn) => {
-        return Number(btn.dataset.stage) === stageId;
-    });
-    if (nextStageBtn && nextStageBtn.disabled) {
-        nextStageBtn.disabled = false;
-        const status = nextStageBtn.querySelector('.stage-status');
-        if (status) {
-            status.textContent = '解放済み';
-        }
-    }
-}
-
 // ------------------------------------------------------------
 // オート出撃登録ポップアップの処理
 
@@ -1084,7 +1206,6 @@ function renderAutoCharacterList() {
                 autoBtnsClassReset();
 
                 autoCharacterData = character;
-                console.log(autoCharacterData);
                 autoCharacterElement.classList.add('is-selected');
             });
         } else {
@@ -1108,8 +1229,53 @@ function autoBtnsClassReset() {
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 let lastGageUpdate = 0;
 // 自動処理
-function gameLoop() {
+function gameLoop(timestamp) {
     if (!isGame) return;
+
+    // 前回の経過時間を保存する変数が空だった場合に、経過時間を代入する
+    if (lastTime === null) {
+        lastTime = timestamp;
+    }
+
+    // ゲーム内の経過時間 ※0.1秒のフレーム上限設定中、これ以上を設定する場合最小値の変更が必要
+    const elapsedTime = Math.min(timestamp - lastTime, 100);
+    lastTime = timestamp;
+    // エネミーの出撃に必要な経過時間
+    enemyElapsedTime += elapsedTime * gameSpeed;
+    // エネミー出撃のインターバル
+    if (enemyElapsedTime >= 5000) {
+        enemyGoSet();
+        enemyElapsedTime -= 5000;
+    }
+
+    // 資金増加に必要な経過時間
+    moneyElapsedTime += elapsedTime * gameSpeed;
+    // 資金増加処理 ※1フレームにつき最大1回実行
+    if (moneyElapsedTime >= 100) {
+        increaseMoney();
+        moneyElapsedTime -= 100;
+    }
+    // 資金増加の正確性を優先する場合
+    // ※蓄積された経過時間に応じて複数回実行
+    // while (moneyElapsedTime >= 100) {
+    //     increaseMoney();
+    //     moneyElapsedTime -= 100;
+    // }
+
+    // オート出撃ボタンがONの時に自動で出撃する処理
+    if (isAuto) {
+        autoElapsedTime += elapsedTime * gameSpeed;
+        if (autoElapsedTime >= 1000) {
+            autoSpawn();
+            autoElapsedTime -= 1000;
+        }
+    }
+
+    // 砦のスキルのクールタイムをカウントする処理
+    if (skillRemainingTime > 0) {
+        skillRemainingTime = Math.max(skillRemainingTime - elapsedTime * gameSpeed, 0);
+        updateSkillDisplay();
+    }
 
     const now = Date.now();
     if (now - lastGageUpdate >= 50) {
@@ -1200,7 +1366,7 @@ function spawnCharacter(player, characterKey) {
             gameMessage.textContent = '所持金が足りません';
             return;
         } else if (lastSpawnTimes[characterKey] !== undefined &&
-            elapsedTime < characterVariation[characterKey].coolTime) {
+            elapsedTime < characterVariation[characterKey].coolTime / gameSpeed) {
             gameMessage.textContent = 'クールタイム中です'
             return;
         }
@@ -1220,26 +1386,23 @@ function getElapsedTime(characterKey) {
     return Date.now() - lastSpawnTimes[characterKey];
 }
 
+// オート出撃した時のゲーム内時間を保存する
+let autoElapsedTime = 0;
 // オート出撃ボタン
 autoBtn.addEventListener('click', () => {
+    if (!isGame) return;
     autoBtn.classList.toggle('is-active');
     if (autoBtn.classList.contains('is-active')) {
         // オート出撃設定にキャラクターがいれば
         if (autoSaveCharacter !== null) {
             autoBtn.textContent = 'AUTO ON';
             isAuto = true;
-            autoIntervalId = setInterval(() => {
-                const characterKey = autoSaveCharacter;
-                const autoCharacterData = createAutoInterval();
-                spawnCharacter(autoCharacterData, characterKey);
-            }, 1000);
         } else {
             autoBtn.classList.remove('is-active');
             gameMessage.textContent = 'キャラクターが登録されていません';
         }
     } else {
         autoBtn.textContent = 'AUTO OFF';
-        isAuto = false;
         autoIntervalStop();
     }
 });
@@ -1249,12 +1412,33 @@ function createAutoInterval() {
 
     return createCharacter(characterVariation[autoSaveCharacter], autoSaveCharacter);
 }
-
-// オート出撃のintervalのリセット関数
-function autoIntervalStop() {
-    clearInterval(autoIntervalId);
-    autoIntervalId = null;
+// オートボタンが押された時の出撃するキャラを呼び出す処理
+function autoSpawn() {
+    if (!isAuto || autoSaveCharacter === null) return;
+    const characterKey = autoSaveCharacter;
+    const autoCharacterData = createAutoInterval();
+    spawnCharacter(autoCharacterData, characterKey);
 }
+
+// オート出撃のリセット関数
+function autoIntervalStop() {
+    isAuto = false;
+    autoElapsedTime = 0;
+}
+
+// 倍速ボタンの処理
+gameSpeedBtn.addEventListener('click', () => {
+    if (!isGame) return;
+    if (gameSpeed === 1) {
+        gameSpeed = 2;
+        gameSpeedBtn.classList.add('active');
+
+    } else if (gameSpeed === 2) {
+        gameSpeed = 1;
+        gameSpeedBtn.classList.remove('active');
+    }
+    gameSpeedBtn.textContent = `▶ ×${gameSpeed}`;
+});
 
 const unitBtn = document.querySelectorAll('.control-panel .unit-btn');
 // 出撃時のクールタイムを設定する処理
@@ -1267,11 +1451,11 @@ function goCharacterCoolTimeGage() {
         const characterKey = savedParty[index];
         const overlays = btn.querySelector('.cooldown-overlay');
         const elapsedTime = getElapsedTime(characterKey);
-        const isCoolingDown = elapsedTime < characterVariation[characterKey].coolTime;
+        const isCoolingDown = elapsedTime < characterVariation[characterKey].coolTime / gameSpeed;
 
         // 出撃ボタンのキャラに出撃履歴が存在すれば処理を進める
         if (lastSpawnTimes[characterKey] !== undefined && isCoolingDown) {
-            const percentage = 100 - (elapsedTime / characterVariation[characterKey].coolTime * 100);
+            const percentage = 100 - (elapsedTime / (characterVariation[characterKey].coolTime / gameSpeed) * 100);
             overlays.style.background = `conic-gradient(rgba(0, 0, 0, 0.6) ${percentage}%, transparent ${percentage}%)`;
         } else {
             overlays.style.background = 'transparent';
@@ -1280,40 +1464,30 @@ function goCharacterCoolTimeGage() {
 }
 
 // エネミーの出撃設定
+let enemyElapsedTime = 0;
+// エネミーの出撃数
+let enemyGoCount = 0;
+// エネミーの出撃設定
 function enemyGoSet() {
-    let enemyGoCount = 0;
-    const goEnemyInterval = setInterval(() => {
-        // ステージのオブジェクトから敵のキーと出撃カウントを含む配列を保存
-        const enemyOptions = currentStage.enemyWaves;
-        const enemyKey = enemyResultKey(enemyOptions, enemyGoCount);
+    // ステージのオブジェクトから敵のキーと出撃カウントを含む配列を保存
+    const enemyOptions = currentStage.enemyWaves;
+    const enemyKey = enemyResultKey(enemyOptions, enemyGoCount);
 
-        // enemyKeyが返して値がundefinedだったら処理を止める
-        if (enemyKey === undefined) {
-            clearInterval(goEnemyInterval);
-            return;
-        }
+    // enemyKeyが返して値がundefinedだったら処理を止める
+    if (enemyKey === undefined) {
+        return;
+    }
 
-        // 保存したキーから対象の敵のオブジェクトを取得
-        const enemyObject = enemyVariation[enemyKey];
+    // 保存したキーから対象の敵のオブジェクトを取得
+    const enemyObject = enemyVariation[enemyKey];
 
-        // 敵のクラスインスタンスを生成
-        const enemy = new Enemy(enemyObject.name, enemyObject.image,
-            enemyObject.maxHp, enemyObject.atk, enemyObject.atkFast, enemyObject.rangeValue,
-            enemyObject.fast, enemyObject.trait, enemyStartX, enemyObject.y, enemyObject.size, enemyObject.dropMoney);
-        enemies.push(enemy);
-        enemyGoCount++;
-        enemy.draw();
-        // 次の出撃時、変数にエネミーのキーが入るか確認する変数
-        const nextEnemyGo = enemyResultKey(enemyOptions, enemyGoCount);
-        // 敵のキーがenemyKeyに入ってなければ処理を停止
-        if (nextEnemyGo === undefined) {
-            clearInterval(goEnemyInterval);
-            return;
-        }
-    }, 5000);
-
-    // 全てのinterval処理をリセットする際に使用する配列へ保存
-    clearGoEnemy.push(goEnemyInterval);
+    // 敵のクラスインスタンスを生成
+    const enemy = new Enemy(enemyObject.name, enemyObject.image,
+        enemyObject.maxHp, enemyObject.atk, enemyObject.atkFast, enemyObject.rangeValue,
+        enemyObject.fast, enemyObject.trait, enemyStartX, enemyObject.y, enemyObject.size, enemyObject.dropMoney);
+    enemies.push(enemy);
+    enemyGoCount++;
+    enemy.draw();
 }
 
 // 敵のキーを条件ごとに返す処理
@@ -1332,15 +1506,13 @@ function enemyResultKey(enemyOptions, goCount) {
 let increaseGold = 1;
 // 増加用のレベルの初期値
 let increaseGoldLevel = 1;
+// 資金増加用の経過時間
+let moneyElapsedTime = 0;
+
 // 出撃コスト用所持金の処理
-function startMoneyInterval() {
-    // ここに今のお金を増やすsetIntervalを移動
-    clearGoEnemy.push(
-        setInterval(() => {
-            playerCastle.money = Math.min(playerCastle.maxMoney, playerCastle.money + increaseGold);
-            money.textContent = playerCastle.money;
-        }, 100)
-    );
+function increaseMoney() {
+    playerCastle.money = Math.min(playerCastle.maxMoney, playerCastle.money + increaseGold);
+    money.textContent = playerCastle.money;
 }
 // 出撃コストの増加金額を増やす処理
 function increaseGoldLevelFunction() {
@@ -1393,20 +1565,17 @@ function enemyKnockDown(enemy) {
 
 // ------------------------------------------------------------
 // クールタイム用の変数
-let nextSkillTime = 0;
 let skillCoolTime = 10000;
-// let isCastleSkill;
+let skillRemainingTime = 0;
 
 // 砦のスキルボタン
 castleSkillBtn.addEventListener('click', () => {
+    if (!isGame) return;
     const coolTime = castleSkillCooldown();
     // クールタイム中はここで停止
     if (!coolTime) return;
 
     gameMessage.textContent = '砦のスキルを使用';
-    skillIntervalId = setInterval(() => {
-        updateSkillDisplay();
-    }, 1000);
 });
 
 // 砦のビームの見た目を作成するための要素作り処理
@@ -1449,9 +1618,14 @@ function beamMakeAnimation() {
 
     // ビームの動きを付ける処理
     function moveBeam() {
+        if (!isGame || !beamElement.isConnected) {
+            beamElement.remove();
+            return;
+        }
+
         const beamAttackEnemies = [...enemies];
         if (currentX < distanceX) {
-            currentX += 8;
+            currentX += 8 * gameSpeed;
             updateBeam(currentX);
 
             // ビームの先端の座標
@@ -1487,27 +1661,26 @@ function beamMakeAnimation() {
 // 砦のスキルのクールタイム
 function castleSkillCooldown() {
     let isCoolTime = true;
-    // スキルを打った瞬間の時間
-    const attackNow = Date.now();
-    // クールタイムが終わってなければ処理を返す
-    if (nextSkillTime > attackNow) {
+
+    // クールタイム中ならここで処理を停止
+    if (skillRemainingTime > 0) {
         gameMessage.textContent = 'クールタイム中です';
         return isCoolTime = false;
     }
-    nextSkillTime = attackNow + skillCoolTime;
+    // ↓↓↓↓↓↓以下クールタイム中でなければ↓↓↓↓↓↓
+    // クールタイムの残り時間をセット
+    skillRemainingTime = skillCoolTime;
     beamMakeAnimation();
     return isCoolTime;
 }
 
 function updateSkillDisplay() {
     // クールタイムの１０秒経過後再使用可能の場合if内の処理に入る
-    if (nextSkillTime - Date.now() < 0) {
+    if (skillRemainingTime === 0) {
         castleSkillText.textContent = 'スキル';
-        clearInterval(skillIntervalId);
         return;
     }
-    const remaining = nextSkillTime - Date.now();
-    castleSkillText.textContent = `${Math.ceil(remaining / 1000)}秒`;
+    castleSkillText.textContent = `${Math.ceil(skillRemainingTime / 1000)}秒`;
 }
 
 // ------------------------------------------------------------
@@ -1525,7 +1698,7 @@ function resizeBattleScreen() {
     const availableWidth = window.innerWidth - paddingLeft - paddingRight;
     const availableHeight = window.innerHeight - paddingTop - paddingBottom;
     // ① ブラウザの幅と高さから縮小率を計算
-    const scaleX = availableWidth / 1100;
+    const scaleX = availableWidth / 1200;
     const scaleY = availableHeight / 700;
     // ② 縮小率を計算
     battleScale = Math.min(scaleX, scaleY, 1);
@@ -1741,6 +1914,8 @@ function renderTrainingCharacters() {
             // 外でクリックしたキーを使用できるように
             selectedKey = key;
             updateTrainingStatus(key);
+            updateLevelUpCost(key);
+            updateStrengthenCost(key);
             // ポップアップの非表示処理を表示へ切り替え
             trainingOverlay.hidden = false;
         });
@@ -1755,10 +1930,13 @@ trainingCloseBtn.addEventListener('click', () => {
 // レベルアップボタン
 trainingUpgradeBtn.addEventListener('click', () => {
     trainingPopUpText.textContent = '';
-    if (PossessionCharacter[selectedKey].level >= 5) {
-        trainingPopUpText.textContent = 'これ以上レベルはあがりません';
+
+    const levelLimit = unlockLevelUp();
+    if (PossessionCharacter[selectedKey].level >= levelLimit.maxLevel) {
+        trainingPopUpText.textContent = levelLimit.message;
         return;
     }
+
     const levelUpCondition = 100 * PossessionCharacter[selectedKey].level;
     // ボタンを押したときに必要な金額が足りてればレベルアップ
     if (playerData.gold >= levelUpCondition) {
@@ -1768,6 +1946,7 @@ trainingUpgradeBtn.addEventListener('click', () => {
         // レベル+1処理
         PossessionCharacter[selectedKey].level++;
         updateTrainingStatus(selectedKey);
+        updateLevelUpCost(selectedKey);
         saveData();
         trainingPopUpText.textContent = 'レベルアップ';
     } else {
@@ -1775,16 +1954,51 @@ trainingUpgradeBtn.addEventListener('click', () => {
     }
 
 });
+
+// 強化ボタン
+trainingStrengthenBtn.addEventListener('click', () => {
+    trainingStrengthenText.textContent = '';
+    if (PossessionCharacter[selectedKey].plus >= unlockEnhance()) {
+        trainingStrengthenText.textContent = 'これ以上強化できません';
+        return;
+    }
+    // プレイヤーの強化石の所持数
+    const key = selectedKey;
+    const characterRarity = characterVariation[key].rarity;
+    const materialRarity = playerData.material[characterRarity];
+    const materialCost = 1 + PossessionCharacter[key].plus;
+
+    // 先に素材が足りているか判定する処理
+    if (materialRarity < materialCost) {
+        trainingStrengthenText.textContent = '素材が足りません';
+        return;
+    }
+
+    // 素材の消費
+    playerData.material[characterRarity] -= materialCost;
+    // 強化値の上昇
+    PossessionCharacter[key].plus += 1;
+    // 各種表示の更新
+    updateMaterialDisplay();
+    updateTrainingStatus(key);
+    updateStrengthenCost(key);
+    // 変更した値のlocal保存
+    saveData();
+    trainingStrengthenText.textContent = '強化成功！';
+});
+
 // 進化ボタン
 trainingEvolutionBtn.addEventListener('click', () => {
     console.log('ここ');
 });
 
-// レベルアップ時のステータスアップ処理
+// レベルアップ・強化時のステータスアップ処理
 function calculateStatus(key) {
     // HPの成長
     const currentMaxHp = characterVariation[key].maxHp +
-        Math.floor((PossessionCharacter[key].level - 1) * characterVariation[key].status.hpUpMagnification);
+        Math.floor((PossessionCharacter[key].level - 1) *
+            characterVariation[key].status.hpUpMagnification +
+            PossessionCharacter[key].plus);
     // 攻撃力の成長
     const currentAtk = characterVariation[key].atk +
         Math.floor(PossessionCharacter[key].level / characterVariation[key].status.atkUpLvInterval);
@@ -1794,6 +2008,7 @@ function calculateStatus(key) {
 
 // htmlの書き換え用の関数
 function updateTrainingStatus(key) {
+    // 育成時の上昇値を受け取る変数
     const statusUp = calculateStatus(key);
 
     trainingCharacterImage.src = characterVariation[key].image;
@@ -1813,8 +2028,19 @@ function updateTrainingStatus(key) {
     } else {
         trainingTrait.textContent = characterVariation[key].trait;
     }
+}
 
-    trainingCost.textContent = `${PossessionCharacter[key].level * 100}`;
+// レベルアップに必要な経費
+function updateLevelUpCost(key) {
+    // レベルアップの必要経費
+    trainingCost.textContent = `${PossessionCharacter[key].level * 100}G`;
+}
+
+// 必要な強化石の表示関数
+function updateStrengthenCost(key) {
+    // 強化石の変数
+    const characterRarity = characterVariation[key].rarity;
+    trainingStrengthenCost.textContent = `${characterRarity}石 × ${1 + PossessionCharacter[key].plus}個`;
 }
 
 // |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
