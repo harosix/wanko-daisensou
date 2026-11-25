@@ -369,10 +369,10 @@ const playerCastle = {
 
 // レベルアップに必要なお金や素材の管理object
 const playerData = {
-    gold: 10000,
-    tickets: 10,
+    gold: 500,
+    tickets: 3,
     material: {
-        N: 10,
+        N: 0,
         R: 0,
         SR: 0,
     }
