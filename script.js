@@ -8,6 +8,9 @@ import { enemyVariation } from './enemyData.js';
 import { stageVariation } from './stageData.js';
 import { PossessionCharacter } from './ownedCharacters.js';
 
+// アニメーション読み込み
+import { lostCharacterAnimation } from './animation.js';
+
 // ステージデータを配列に変換
 const stages = Object.values(stageVariation);
 
@@ -278,6 +281,10 @@ const resultRewards = document.getElementById('resultRewards');
 const retryBtn = document.getElementById('retryBtn');
 const resultHomeBtn = document.getElementById('resultHomeBtn');
 
+// 初回クリア報酬表示
+const firstClearRewards = document.getElementById('firstClearRewards');
+const firstClearGold = document.getElementById('firstClearGold');
+const firstClearTickets = document.getElementById('firstClearTickets');
 /* ========================================
    ⑫ 機能解放ポップアップ関連 
 ======================================== */
@@ -451,6 +458,10 @@ class Character {
         )
         this.moveAttack.playbackRate = gameSpeed;
     }
+    // キャラをロストした時のアニメーション
+    lostCharacterAnimation() {
+
+    }
 
     // キャラの描写処理
     draw() {
@@ -504,13 +515,14 @@ class Character {
 
 // プレイヤー 子クラス
 class Player extends Character {
-    constructor(name, image, maxHp, atk, atkFast, atkRange, fast, trait, x, y, size, cost, buff, deBuff) {
+    constructor(name, image, maxHp, atk, atkFast, atkRange, fast, trait, x, y, size, cost, buff, deBuff, plus) {
         super(name, image, maxHp, atk, atkFast, atkRange, fast, trait, x, y, size);
         this.cost = cost;
         this.buff = buff ?? {};
         this.deBuff = deBuff ?? {};
         // 攻撃モーションのx値
         this.attackX = 10;
+        this.plus = plus;
     }
     // 接触している敵を1体取得する
     findTarget() {
@@ -551,17 +563,18 @@ class Player extends Character {
                 }
                 // 前回の攻撃から１秒以上経過しているか
                 if (now - this.lateAttack >= this.atkFast / gameSpeed) {
-                    currentStage.hp -= this.atk * 10;
+                    currentStage.hp -= this.atk * 10 + this.plus * 5;
                     this.lateAttack = now;
                     this.attackAnimation();
                     // 敵拠点のhpが0ならゲームクリア
                     if (currentStage.hp <= 0) {
+                        const isFirstClear = currentStage.id === currentUnlockedStage;
                         currentStage.hp = Math.max(0, currentStage.hp);
                         const previousUnlockedStage = currentUnlockedStage;
                         const nextStageId = currentStage.id + 1;
                         currentUnlockedStage = Math.max(currentUnlockedStage, nextStageId)
                         stopGame();
-                        const clearDrop = giveClearReward();
+                        const clearDrop = giveClearReward(isFirstClear);
                         saveData();
                         gameResult('🏆', 'STAGE CLEAR!', '次のステージに挑戦しよう！', 'ステージ選択へ', true, clearDrop);
                         // 強化機能 追加時の通知
@@ -596,6 +609,7 @@ function createCharacter(data, key) {
         data.cost,
         data.buff,
         data.deBuff,
+        PossessionCharacter[key].plus,
     );
 }
 
@@ -637,7 +651,9 @@ class Enemy extends Character {
                 this.attackAnimation();
                 // プレイヤーのHPが０なら要素を削除と配列から削除
                 if (target.hp <= 0) {
-                    target.character.remove();
+                    target.moveAnimate?.cancel();
+                    target.moveAttack?.cancel();
+                    lostCharacterAnimation(target.character, -1, gameSpeed);
                     const result = players.indexOf(target);
                     players.splice(result, 1);
                 }
@@ -666,11 +682,10 @@ class Enemy extends Character {
 
 // ステージのクラス
 class Stage {
-    constructor(id, maxHp, hp, spawnLimit, enemyWaves, clearResult, stageProperty) {
+    constructor(id, maxHp, hp, enemyWaves, clearResult, stageProperty) {
         this.id = id;
         this.maxHp = maxHp;
         this.hp = hp;
-        this.spawnLimit = spawnLimit;
         this.enemyWaves = enemyWaves;
         this.clearResult = clearResult;
         this.stageProperty = stageProperty;
@@ -682,7 +697,6 @@ function createStage(data) {
         data.id,
         data.stageMaxHp,
         data.stageHp,
-        data.spawnLimit,
         data.enemyWaves,
         data.clearResult,
         data.stageProperty,
@@ -760,8 +774,7 @@ function resetGame() {
     players.length = 0;
     // 敵の出撃している保存用配列のリセット
     enemies.length = 0;
-    enemyGoCount = 0;
-    enemyElapsedTime = 0;
+    createEnemySpawnPatterns();
     // キャラと敵の表示をリセット
     characterLayer.innerHTML = '';
     // 砦のスキルのクールタイムのリセット
@@ -808,28 +821,41 @@ function gameResult(icon, title, message, btnText, isWin, drops) {
         renderClearRewards(drops);
     } else {
         resultRewards.innerHTML = '';
+        firstClearRewards.hidden = true;
     }
 }
 // ステージクリア時に報酬をドロップ
-function giveClearReward() {
+function giveClearReward(isFirstClear) {
     // チケットのドロップ時の一時保存変数
     let dropTicket = 0;
 
-    playerData.gold += currentStage.clearResult.gold;
-    updateGoldDisplay();
+    const clearResult = currentStage.clearResult;
+
+    playerData.gold += clearResult.gold;
 
     // ガチャチケの確率を作成
     const dropGachaTicket = Math.floor(Math.random() * 100);
-    // 20%でガチャチケドロップ
-    if (dropGachaTicket < 20) {
+    // ステージごとの確率でガチャチケットをドロップ
+    if (dropGachaTicket < clearResult.ticketDropRate) {
         playerData.tickets += 1;
         dropTicket = 1;
-        updateGachaDisplay();
     }
 
+    // 初回クリア時の報酬
+    if (isFirstClear && clearResult.firstClearReward) {
+        playerData.gold += clearResult.firstClearReward.gold;
+        playerData.tickets += clearResult.firstClearReward.tickets;
+    }
+
+    updateGoldDisplay();
+    updateGachaDisplay();
+
     return {
-        dropGold: currentStage.clearResult.gold,
+        dropGold: clearResult.gold,
         dropTicket: dropTicket,
+        isFirstClear: isFirstClear,
+        firstClearGold: isFirstClear ? (clearResult.firstClearReward?.gold ?? 0) : 0,
+        firstClearTickets: isFirstClear ? (clearResult.firstClearReward?.tickets ?? 0) : 0,
     }
 }
 
@@ -858,6 +884,15 @@ function renderClearRewards(drops) {
     }
     // htmlへ表示
     resultRewards.appendChild(dropRenderSpace);
+
+    // 初回クリアであれば報酬を表示
+    if (drops.isFirstClear) {
+        firstClearGold.textContent = drops.firstClearGold;
+        firstClearTickets.textContent = drops.firstClearTickets;
+        firstClearRewards.hidden = false;
+    } else {
+        firstClearRewards.hidden = true;
+    }
 }
 
 // 戦闘終了時のリトライボタンの処理
@@ -1240,13 +1275,19 @@ function gameLoop(timestamp) {
     // ゲーム内の経過時間 ※0.1秒のフレーム上限設定中、これ以上を設定する場合最小値の変更が必要
     const elapsedTime = Math.min(timestamp - lastTime, 100);
     lastTime = timestamp;
-    // エネミーの出撃に必要な経過時間
-    enemyElapsedTime += elapsedTime * gameSpeed;
-    // エネミー出撃のインターバル
-    if (enemyElapsedTime >= 5000) {
-        enemyGoSet();
-        enemyElapsedTime -= 5000;
-    }
+
+    // エネミーの出撃パターンを全て取得する
+    enemySpawnPatterns.forEach((pattern) => {
+        pattern.elapsedTime += elapsedTime * gameSpeed;
+        const enemyData = enemyResultData(pattern.waves, pattern.goCount);
+
+        // エネミー出撃のインターバル
+        if (enemyData !== undefined && pattern.elapsedTime >= enemyData.interval) {
+            enemyGoSet(enemyData);
+            pattern.goCount++;
+            pattern.elapsedTime -= enemyData.interval;
+        }
+    });
 
     // 資金増加に必要な経過時間
     moneyElapsedTime += elapsedTime * gameSpeed;
@@ -1437,6 +1478,17 @@ gameSpeedBtn.addEventListener('click', () => {
         gameSpeed = 1;
         gameSpeedBtn.classList.remove('active');
     }
+    // 開発用
+    // if (gameSpeed === 1) {
+    //     gameSpeed = 2;
+    //     gameSpeedBtn.classList.add('active');
+
+    // } else if (gameSpeed === 2) {
+    //     gameSpeed = 4;
+    // } else if (gameSpeed === 4) {
+    //     gameSpeed = 1;
+    //     gameSpeedBtn.classList.remove('active');
+    // }
     gameSpeedBtn.textContent = `▶ ×${gameSpeed}`;
 });
 
@@ -1463,44 +1515,59 @@ function goCharacterCoolTimeGage() {
     });
 }
 
-// エネミーの出撃設定
-let enemyElapsedTime = 0;
-// エネミーの出撃数
-let enemyGoCount = 0;
-// エネミーの出撃設定
-function enemyGoSet() {
-    // ステージのオブジェクトから敵のキーと出撃カウントを含む配列を保存
-    const enemyOptions = currentStage.enemyWaves;
-    const enemyKey = enemyResultKey(enemyOptions, enemyGoCount);
 
-    // enemyKeyが返して値がundefinedだったら処理を止める
-    if (enemyKey === undefined) {
+// 出撃パターンの保存変数
+let enemySpawnPatterns = [];
+
+// エネミーの出撃設定
+function enemyGoSet(enemyData) {
+    // enemyDataが返して値がundefinedだったら処理を止める
+    if (enemyData === undefined) {
         return;
     }
 
     // 保存したキーから対象の敵のオブジェクトを取得
-    const enemyObject = enemyVariation[enemyKey];
+    const enemyObject = enemyVariation[enemyData.key];
 
     // 敵のクラスインスタンスを生成
     const enemy = new Enemy(enemyObject.name, enemyObject.image,
         enemyObject.maxHp, enemyObject.atk, enemyObject.atkFast, enemyObject.rangeValue,
         enemyObject.fast, enemyObject.trait, enemyStartX, enemyObject.y, enemyObject.size, enemyObject.dropMoney);
     enemies.push(enemy);
-    enemyGoCount++;
+    // enemyGoCount++;
     enemy.draw();
 }
 
 // 敵のキーを条件ごとに返す処理
-function enemyResultKey(enemyOptions, goCount) {
+function enemyResultData(enemyOptions, goCount) {
     let count = 0;
     for (let i = 0; i < enemyOptions.length; i++) {
         count += enemyOptions[i].count;
         if (goCount < count) {
-            return enemyOptions[i].key;
+            return enemyOptions[i];
         }
     }
 }
 
+// ステージのデータからエネミー出撃パターンを取得する
+function getEnemyWaves() {
+    const waves = currentStage.enemyWaves;
+    // 取得したウェーブが配列か否か
+    if (Array.isArray(waves[0])) {
+        return waves;
+    } else {
+        return [waves];
+    }
+}
+
+// 出撃パターンごとの管理データを作成する
+function createEnemySpawnPatterns() {
+    const waves = getEnemyWaves();
+
+    enemySpawnPatterns = waves.map((wave) => {
+        return { waves: wave, elapsedTime: 0, goCount: 0 };
+    });
+}
 // ------------------------------------------------------------
 // 増加用の所持金の初期値
 let increaseGold = 1;
@@ -1554,7 +1621,10 @@ function enemyKnockDown(enemy) {
             playerCastle.money + enemy.dropMoney
         );
         money.textContent = playerCastle.money;
-        enemy.character.remove();
+        enemy.moveAnimate?.cancel();
+        enemy.moveAttack?.cancel();
+        lostCharacterAnimation(enemy.character, 1, gameSpeed);
+        // enemy.character.remove();
         const result = enemies.indexOf(enemy);
         // 配列に対象がある場合のみ削除
         if (result !== -1) {
@@ -1913,6 +1983,11 @@ function renderTrainingCharacters() {
         characterElement.addEventListener('click', () => {
             // 外でクリックしたキーを使用できるように
             selectedKey = key;
+
+            // 前回のメッセージをリセット（追加）
+            trainingPopUpText.textContent = 'レベルアップしよう！';
+            trainingStrengthenText.textContent = '強化しよう！';
+
             updateTrainingStatus(key);
             updateLevelUpCost(key);
             updateStrengthenCost(key);

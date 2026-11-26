@@ -2530,11 +2530,52 @@ button {
     line-height: 1.7;
 }
 
+/* ========================================
+   リザルト画面：初回クリア報酬
+======================================== */
+
+.first-clear-rewards {
+    margin-top: 16px;
+    padding: 14px 18px;
+
+    border: 2px solid #e4b74e;
+    border-radius: 14px;
+
+    background: linear-gradient(135deg, #fff8e5, #ffedbd);
+    color: #95600d;
+}
+
+.first-clear-rewards h3 {
+    margin: 0 0 12px;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.first-clear-reward-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.first-clear-reward-row strong {
+    color: #95600d;
+    font-size: 17px;
+}
+
+/* 報酬追加によるポップアップの見切れ防止 */
+.result-modal {
+    max-height: 100%;
+    overflow-y: auto;
+}
 
 /* ========================================
    勝敗結果：操作ボタン
 ======================================== */
-
 .result-actions {
     display: flex;
     justify-content: center;
@@ -2581,11 +2622,9 @@ button {
     background: #d5e3ef;
 }
 
-
 /* ========================================
    勝敗結果：画面高さが低い場合
 ======================================== */
-
 @media (max-height: 500px) {
 
     .result-modal {
